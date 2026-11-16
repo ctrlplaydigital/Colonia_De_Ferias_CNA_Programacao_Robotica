@@ -141,6 +141,38 @@
             .info-value { text-align: left; }
             .contact-item { flex-direction: column; text-align: center; }
         }
+
+        /* ===== VALIDAÇÃO + CAIXAS DE SELEÇÃO PERSONALIZADAS ===== */
+        .form-group { position: relative; }
+        .field-error { display: none; color: #B91C1C; font-size: 0.8rem; font-weight: 600; margin-top: 0.35rem; line-height: 1.35; }
+        .form-group.has-error .field-error { display: block; }
+        .form-group.has-error input, .form-group.has-error .cs-trigger { border-color: #DC2626; background: #FFF5F5; }
+        .form-group.has-error input:focus, .form-group.has-error .cs-trigger:focus-visible { box-shadow: 0 0 0 4px rgba(220,38,38,0.15); }
+        .field-hint { font-size: 0.78rem; color: #6b6b85; margin-top: 0.35rem; line-height: 1.35; }
+        .field-sugestao { font-size: 0.85rem; color: var(--navy); margin-top: 0.4rem; }
+        .field-sugestao:empty { display: none; }
+        .field-sugestao button { border: none; background: #EAF4FF; color: var(--navy); font-family: inherit; font-weight: 700; font-size: 0.85rem; border-radius: 8px; padding: 0.2rem 0.6rem; cursor: pointer; margin-left: 0.2rem; }
+
+        .select-native { position: absolute !important; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+        .cs-trigger { width: 100%; height: 50px; padding: 0 2.6rem 0 0.9rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-family: inherit; font-size: 1rem; color: #222; text-align: left; cursor: pointer; display: flex; align-items: center; position: relative; transition: border-color 0.2s, box-shadow 0.2s; }
+        .cs-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .cs-trigger.placeholder .cs-value { color: #a3a3b8; }
+        .cs-arrow { position: absolute; right: 1.1rem; top: 50%; width: 9px; height: 9px; border-right: 2.5px solid var(--navy); border-bottom: 2.5px solid var(--navy); transform: translateY(-70%) rotate(45deg); transition: transform 0.2s; }
+        .cs-trigger.open .cs-arrow { transform: translateY(-30%) rotate(-135deg); }
+        .cs-trigger:focus-visible, .cs-trigger.open { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px rgba(236,25,63,0.12); }
+        .cs-trigger:disabled { background: #F1F1F7; color: #9a9ab0; cursor: not-allowed; }
+        .cs-trigger:disabled .cs-arrow { border-color: #b8b8cc; }
+        .cs-panel { display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; margin: 0; padding: 6px; list-style: none; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(42,42,120,0.2); max-height: 280px; overflow-y: auto; }
+        .cs-panel.open { display: block; animation: csIn 0.12s ease-out; }
+        @keyframes csIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+        .cs-opt { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; min-height: 46px; padding: 0.55rem 0.8rem; border-radius: 10px; cursor: pointer; font-size: 0.95rem; color: #222; }
+        .cs-title { display: block; }
+        .cs-sub { display: block; font-size: 0.78rem; color: #6b6b85; font-weight: 500; }
+        .cs-opt.active { background: var(--bg); }
+        .cs-opt[aria-selected="true"] { background: #FDECEF; color: var(--red-dark); font-weight: 600; }
+        .cs-opt[aria-selected="true"]::after { content: '✓'; font-weight: 800; color: var(--red); }
+        .cs-empty { padding: 0.85rem; color: #6b6b85; font-size: 0.9rem; }
+
     </style>
 </head>
 <body>
@@ -192,7 +224,7 @@
             </ol>
             <p class="note">💡 Quer fazer os dois cursos? Envie o formulário <strong>duas vezes</strong>, uma para cada curso. As vagas são limitadas!</p>
 
-            <form id="inscriptionForm" class="form-grid">
+            <form id="inscriptionForm" class="form-grid" novalidate>
                 <input type="hidden" id="unidade" name="unidade">
 
                 <div class="form-section"><span class="step">1</span> Dados do aluno e do responsável</div>
@@ -200,21 +232,27 @@
                 <div class="form-group full">
                     <label for="nomeAluno">Nome do Aluno *</label>
                     <input type="text" id="nomeAluno" name="nomeAluno" required autocomplete="off">
+                    <div class="field-error" id="err-nomeAluno"></div>
                 </div>
 
                 <div class="form-group full">
                     <label for="nomeResponsavel">Nome do Responsável *</label>
                     <input type="text" id="nomeResponsavel" name="nomeResponsavel" required autocomplete="name">
+                    <div class="field-error" id="err-nomeResponsavel"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="telefoneContato">Telefone de Contato *</label>
-                    <input type="tel" id="telefoneContato" name="telefoneContato" required inputmode="tel" autocomplete="tel" minlength="14" title="Informe DDD + número" placeholder="(XX) XXXXX-XXXX">
+                    <input type="tel" id="telefoneContato" name="telefoneContato" required inputmode="tel" autocomplete="tel" placeholder="(11) 98765-4321">
+                    <div class="field-error" id="err-telefoneContato"></div>
+                    <div class="field-hint">Mora fora do Brasil? Comece com + e o código do país (ex.: +351 912 345 678).</div>
                 </div>
 
                 <div class="form-group">
                     <label for="emailResponsavel">Email do Responsável *</label>
-                    <input type="email" id="emailResponsavel" name="emailResponsavel" required autocomplete="email" placeholder="email@exemplo.com">
+                    <input type="email" id="emailResponsavel" name="emailResponsavel" required inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="email@exemplo.com">
+                    <div class="field-error" id="err-emailResponsavel"></div>
+                    <div class="field-sugestao" id="sug-emailResponsavel"></div>
                 </div>
 
                 <div class="form-section"><span class="step">2</span> Escolha da turma</div>
@@ -224,6 +262,7 @@
                     <select id="idade" name="idade" required>
                         <option value="">Selecione a idade</option>
                     </select>
+                    <div class="field-error" id="err-idade"></div>
                 </div>
 
                 <div class="form-group">
@@ -231,6 +270,7 @@
                     <select id="periodo" name="periodo" required disabled>
                         <option value="">Selecione primeiro a idade</option>
                     </select>
+                    <div class="field-error" id="err-periodo"></div>
                 </div>
 
                 <div class="form-group full">
@@ -238,6 +278,7 @@
                     <select id="turma" name="turma" required disabled>
                         <option value="">Selecione primeiro o período</option>
                     </select>
+                    <div class="field-error" id="err-turma"></div>
                 </div>
 
                 <div class="form-group full" id="turmaInfoCard" style="display: none;">
@@ -318,15 +359,6 @@
         <div class="status-icon"><div class="badge-icon warn">🔗</div></div>
         <h2>Link de inscrição inválido</h2>
         <p>Não foi possível identificar a sua unidade. Peça à sua escola o link de inscrição correto.</p>
-        <div class="contact-box">
-            <h3>❓ Precisa de ajuda?</h3>
-            <p>Entre em contato com a nossa equipe:</p>
-            <div class="contact-item">
-                <span class="contact-label">📞 Ligações e WhatsApp:</span>
-                <span class="contact-value" data-cfg="telefone"></span>
-            </div>
-            <p>Atendemos de segunda a sexta, das 9h às 20h. Sábado, das 9h às 13h.</p>
-        </div>
     </div>
     </main>
 
@@ -391,7 +423,7 @@
         }
 
         // URL do Web App do Google Apps Script (termina em /exec)
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzbX9x2JL2MFCSTcc_4Ym9s7DiEXMOGTzhZFeAk5PEZv1HNYoRt6fMxFGsFwCfK4CEb/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwozoyXNcA0cf0HwJiuMQklhSR2mH6iJqnd1CsB5YtdPOivzWH7VsKJP14HLgC0jJzt/exec';
 
         let turmasDisponiveis = [];
         let turmaSelecionadaInfo = null;
@@ -418,24 +450,340 @@
 
             carregarIdades();
 
-            document.getElementById('telefoneContato').addEventListener('input', function() {
-                let d = this.value.replace(/\D/g, '');
-                if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
-                d = d.slice(0, 11);
-                let v = d;
-                if (d.length > 10)      v = d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
-                else if (d.length > 6)  v = d.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-                else if (d.length > 2)  v = d.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-                else if (d.length > 0)  v = '(' + d;
-                this.value = v;
+            document.querySelectorAll('.form-group select').forEach(criarSelectCustom);
+
+            // Telefone: máscara (Brasil) ou formato livre com + (exterior)
+            const telefone = document.getElementById('telefoneContato');
+            telefone.addEventListener('input', function() {
+                const novo = formatarTelefone(this.value);
+                if (novo !== this.value) this.value = novo;
+                if (this.closest('.form-group').classList.contains('has-error')) validarCampo('telefoneContato');
             });
-            
+
+            // Validação ao sair do campo; erro some assim que a pessoa corrige
+            ['nomeAluno', 'nomeResponsavel', 'telefoneContato', 'emailResponsavel'].forEach(function(id) {
+                const el = document.getElementById(id);
+                el.addEventListener('blur', function() {
+                    if (!el.value.trim()) return;           // campo vazio só reclama no envio
+                    validarCampo(id);
+                    if (id === 'emailResponsavel') atualizarSugestaoEmail();
+                });
+                el.addEventListener('input', function() {
+                    if (el.closest('.form-group').classList.contains('has-error')) validarCampo(id);
+                });
+            });
+            document.getElementById('emailResponsavel').addEventListener('input', function() {
+                emailAvisado = false;
+                document.getElementById('sug-emailResponsavel').textContent = '';
+            });
+
             document.getElementById('idade').addEventListener('change', carregarPeriodos);
             document.getElementById('periodo').addEventListener('change', carregarTurmas);
             document.getElementById('turma').addEventListener('change', exibirInformacoesTurma);
             document.getElementById('inscriptionForm').addEventListener('submit', enviarFormulario);
         });
         
+
+        // ==============================================================
+        //  VALIDAÇÃO (telefone com suporte a números do exterior, e-mail)
+        // ==============================================================
+        const DDDS_VALIDOS = new Set(['11','12','13','14','15','16','17','18','19','21','22','24','27','28','31','32','33','34','35','37','38','41','42','43','44','45','46','47','48','49','51','53','54','55','61','62','63','64','65','66','67','68','69','71','73','74','75','77','79','81','82','83','84','85','86','87','88','89','91','92','93','94','95','96','97','98','99']);
+
+        function formatarBR(d) {
+            d = d.slice(0, 11);
+            if (d.length > 10)     return d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+            if (d.length > 6)      return d.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            if (d.length > 2)      return d.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+            if (d.length > 0)      return '(' + d;
+            return '';
+        }
+
+        // Com "+": número internacional (mantém os espaços que a pessoa digitar, até 15 dígitos).
+        // Sem "+": número do Brasil, com máscara (11) 98765-4321.
+        function formatarTelefone(valor) {
+            const v = String(valor || '');
+            if (v.trim().charAt(0) === '+') {
+                const d = v.replace(/\D/g, '');
+                if (d.indexOf('55') === 0) {                       // +55 = Brasil
+                    const resto = d.slice(2);
+                    return resto ? '+55 ' + formatarBR(resto) : '+55';
+                }
+                let out = '+', digitos = 0;
+                for (const ch of v.replace(/^\s*\+/, '')) {
+                    if (/\d/.test(ch)) { if (digitos >= 15) break; digitos++; out += ch; }
+                    else if (/[\s\-()]/.test(ch)) { if (!/[\s\-()]$/.test(out) && out !== '+') out += ch === '-' ? '-' : ' '; }
+                }
+                return out;
+            }
+            let d = v.replace(/\D/g, '').replace(/^0+/, '');
+            if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2);   // colou com 55 na frente
+            return formatarBR(d);
+        }
+
+        function erroTelefoneBR(d) {
+            if (d.length !== 10 && d.length !== 11) return 'Digite o DDD e o número. Ex.: (11) 98765-4321. Se for de fora do Brasil, comece com + e o código do país.';
+            if (!DDDS_VALIDOS.has(d.slice(0, 2))) return 'DDD inválido. Confira os dois primeiros números.';
+            if (d.length === 11 && d.charAt(2) !== '9') return 'Celular com 11 dígitos começa com 9 depois do DDD.';
+            if (d.length === 10 && '01'.indexOf(d.charAt(2)) !== -1) return 'Número de telefone inválido.';
+            if (/^(\d)\1+$/.test(d.slice(2))) return 'Número de telefone inválido.';
+            return '';
+        }
+
+        function validarTelefone(valor) {
+            const v = String(valor || '').trim();
+            if (!v) return 'Informe um telefone de contato.';
+            const d = v.replace(/\D/g, '');
+            if (v.charAt(0) === '+') {
+                if (d.indexOf('55') === 0) return erroTelefoneBR(d.slice(2));
+                if (d.length < 8 || d.length > 15 || /^(\d)\1+$/.test(d)) return 'Telefone internacional inválido. Use o código do país e o número. Ex.: +351 912 345 678.';
+                return '';
+            }
+            return erroTelefoneBR(d.replace(/^0+/, ''));
+        }
+
+        const EMAIL_RE = /^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/;
+
+        function validarEmail(valor) {
+            const v = String(valor || '').trim();
+            if (!v) return 'Informe o e-mail do responsável.';
+            const local = v.split('@')[0];
+            const dominio = v.split('@')[1] || '';
+            const tld = dominio.split('.').pop();
+            if (v.length > 254 || !EMAIL_RE.test(v) || v.indexOf('..') !== -1 ||
+                local.charAt(0) === '.' || local.slice(-1) === '.' || !/^[A-Za-z]{2,}$/.test(tld)) {
+                return 'E-mail inválido. Confira se está no formato nome@exemplo.com.';
+            }
+            return '';
+        }
+
+        const DOMINIOS_CORRIGIDOS = {
+            'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gmil.com': 'gmail.com', 'gmal.com': 'gmail.com',
+            'gnail.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmaill.com': 'gmail.com', 'gemail.com': 'gmail.com',
+            'gmail.com.br': 'gmail.com', 'gmail.co': 'gmail.com', 'gmail.cm': 'gmail.com', 'gmail.com.com': 'gmail.com',
+            'hotmial.com': 'hotmail.com', 'hotmal.com': 'hotmail.com', 'hotmai.com': 'hotmail.com', 'hotmil.com': 'hotmail.com',
+            'hotmaill.com': 'hotmail.com', 'hormail.com': 'hotmail.com', 'hotmail.co': 'hotmail.com',
+            'outlok.com': 'outlook.com', 'outloo.com': 'outlook.com', 'outllok.com': 'outlook.com',
+            'yaho.com': 'yahoo.com', 'yahooo.com': 'yahoo.com', 'yaoo.com': 'yahoo.com', 'yahoo.co': 'yahoo.com',
+            'icloud.co': 'icloud.com', 'iclod.com': 'icloud.com', 'icoud.com': 'icloud.com'
+        };
+
+        function sugerirEmail(valor) {
+            const m = String(valor || '').trim().toLowerCase().match(/^(.+)@([^@]+)$/);
+            if (!m) return '';
+            let novo = DOMINIOS_CORRIGIDOS[m[2]];
+            if (!novo) {
+                novo = m[2].replace(/\.(con|cim|cmo|ocm|vom|xom|comm)$/, '.com')
+                           .replace(/\.com\.(b|brr|bt|nr)$/, '.com.br').replace(/\.combr$/, '.com.br');
+                if (novo === m[2]) novo = '';
+            }
+            return novo ? m[1] + '@' + novo : '';
+        }
+
+        function validarNome(valor) {
+            const v = String(valor || '').trim();
+            if (!v) return 'Preencha este campo.';
+            if (!/\p{L}{2,}/u.test(v)) return 'Digite um nome válido.';
+            return '';
+        }
+        function validarSelecao(msg) { return function(v) { return v ? '' : msg; }; }
+
+        const REGRAS = {
+            nomeAluno: validarNome,
+            nomeResponsavel: validarNome,
+            telefoneContato: validarTelefone,
+            emailResponsavel: validarEmail,
+            idade: validarSelecao('Selecione a idade.'),
+            periodo: validarSelecao('Selecione o período.'),
+            turma: validarSelecao('Selecione a turma.')
+        };
+        const ORDEM_CAMPOS = ['nomeAluno', 'nomeResponsavel', 'telefoneContato', 'emailResponsavel', 'idade', 'periodo', 'turma'];
+        let emailAvisado = false;
+
+        function mostrarErro(id, msg) {
+            const grupo = document.getElementById(id).closest('.form-group');
+            grupo.classList.toggle('has-error', !!msg);
+            const alvo = document.getElementById('err-' + id);
+            if (alvo) alvo.textContent = msg || '';
+        }
+
+        function validarCampo(id) {
+            const msg = REGRAS[id](document.getElementById(id).value);
+            mostrarErro(id, msg);
+            return !msg;
+        }
+
+        function atualizarSugestaoEmail() {
+            const alvo = document.getElementById('sug-emailResponsavel');
+            const campo = document.getElementById('emailResponsavel');
+            const proposta = validarEmail(campo.value) === '' ? sugerirEmail(campo.value) : '';
+            alvo.textContent = '';
+            if (!proposta) return '';
+            alvo.appendChild(document.createTextNode('Você quis dizer '));
+            const b = document.createElement('button');
+            b.type = 'button'; b.textContent = proposta;
+            b.addEventListener('click', function() {
+                campo.value = proposta; alvo.textContent = ''; emailAvisado = false;
+                validarCampo('emailResponsavel');
+            });
+            alvo.appendChild(b);
+            alvo.appendChild(document.createTextNode('?'));
+            return proposta;
+        }
+
+        function validarFormulario() {
+            // normaliza antes de validar
+            ['nomeAluno', 'nomeResponsavel'].forEach(function(id) {
+                const el = document.getElementById(id); el.value = el.value.replace(/\s+/g, ' ').trim();
+            });
+            const email = document.getElementById('emailResponsavel');
+            email.value = email.value.trim().toLowerCase();
+            const tel = document.getElementById('telefoneContato');
+            tel.value = formatarTelefone(tel.value).trim();
+
+            let primeiroInvalido = null;
+            ORDEM_CAMPOS.forEach(function(id) {
+                if (!validarCampo(id) && !primeiroInvalido) primeiroInvalido = id;
+            });
+
+            // e-mail com cara de erro de digitação: avisa uma vez antes de aceitar
+            if (!primeiroInvalido) {
+                const proposta = atualizarSugestaoEmail();
+                if (proposta && !emailAvisado) {
+                    emailAvisado = true;
+                    mostrarErro('emailResponsavel', 'Confira o e-mail: parece haver um erro de digitação. Se estiver certo, é só enviar de novo.');
+                    primeiroInvalido = 'emailResponsavel';
+                }
+            }
+
+            if (primeiroInvalido) {
+                const el = document.getElementById(primeiroInvalido);
+                const foco = el.tagName === 'SELECT' ? document.getElementById('cs-' + primeiroInvalido) : el;
+                foco.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(function() { foco.focus({ preventScroll: true }); }, 250);
+                return false;
+            }
+            return true;
+        }
+
+        // ==============================================================
+        //  CAIXAS DE SELEÇÃO PERSONALIZADAS (substituem o menu padrão do navegador)
+        //  O <select> original continua existindo (escondido) e guardando o valor.
+        // ==============================================================
+        const dropdownsAbertos = [];
+
+        function criarSelectCustom(select) {
+            const grupo = select.closest('.form-group');
+            const label = grupo.querySelector('label');
+            if (label && !label.id) label.id = 'lbl-' + select.id;
+
+            select.classList.add('select-native');
+            select.tabIndex = -1;
+            select.setAttribute('aria-hidden', 'true');
+
+            const trigger = document.createElement('button');
+            trigger.type = 'button';
+            trigger.id = 'cs-' + select.id;
+            trigger.className = 'cs-trigger';
+            trigger.setAttribute('aria-haspopup', 'listbox');
+            trigger.setAttribute('aria-expanded', 'false');
+            if (label) trigger.setAttribute('aria-labelledby', label.id);
+            const valor = document.createElement('span'); valor.className = 'cs-value';
+            const seta = document.createElement('span'); seta.className = 'cs-arrow'; seta.setAttribute('aria-hidden', 'true');
+            trigger.appendChild(valor); trigger.appendChild(seta);
+
+            const painel = document.createElement('ul');
+            painel.className = 'cs-panel';
+            painel.id = 'cs-list-' + select.id;
+            painel.setAttribute('role', 'listbox');
+            trigger.setAttribute('aria-controls', painel.id);
+
+            select.insertAdjacentElement('afterend', trigger);
+            trigger.insertAdjacentElement('afterend', painel);
+
+            let ativo = -1;
+            const opcoes = function() { return Array.prototype.filter.call(select.options, function(o) { return o.value !== ''; }); };
+            const itens = function() { return painel.querySelectorAll('.cs-opt'); };
+
+            function render() {
+                const sel = select.options[select.selectedIndex];
+                valor.textContent = sel ? (sel.dataset.titulo || sel.textContent) : '';
+                trigger.classList.toggle('placeholder', !select.value);
+                trigger.disabled = select.disabled;
+                if (select.disabled) fechar();
+
+                painel.textContent = '';
+                const lista = opcoes();
+                if (!lista.length) {
+                    const vazio = document.createElement('li'); vazio.className = 'cs-empty'; vazio.textContent = 'Nenhuma opção disponível';
+                    painel.appendChild(vazio);
+                }
+                lista.forEach(function(o, i) {
+                    const li = document.createElement('li');
+                    li.className = 'cs-opt'; li.setAttribute('role', 'option');
+                    li.setAttribute('aria-selected', o.value === select.value ? 'true' : 'false');
+                    li.dataset.value = o.value;
+                    const txt = document.createElement('span');
+                    const t = document.createElement('span'); t.className = 'cs-title'; t.textContent = o.dataset.titulo || o.textContent;
+                    txt.appendChild(t);
+                    if (o.dataset.sub) { const sub = document.createElement('span'); sub.className = 'cs-sub'; sub.textContent = o.dataset.sub; txt.appendChild(sub); }
+                    li.appendChild(txt);
+                    li.addEventListener('mousedown', function(e) { e.preventDefault(); });
+                    li.addEventListener('click', function() { escolher(i); });
+                    li.addEventListener('mousemove', function() { destacar(i, false); });
+                    painel.appendChild(li);
+                });
+            }
+
+            function destacar(i, rolar) {
+                const todos = itens();
+                if (!todos.length) return;
+                ativo = Math.max(0, Math.min(i, todos.length - 1));
+                todos.forEach(function(el, idx) { el.classList.toggle('active', idx === ativo); });
+                if (rolar !== false) todos[ativo].scrollIntoView({ block: 'nearest' });
+            }
+
+            function abrir() {
+                if (trigger.disabled) return;
+                dropdownsAbertos.forEach(function(f) { if (f !== fechar) f(); });
+                painel.classList.add('open'); trigger.classList.add('open'); trigger.setAttribute('aria-expanded', 'true');
+                const idx = opcoes().findIndex(function(o) { return o.value === select.value; });
+                destacar(idx >= 0 ? idx : 0);
+                setTimeout(function() { painel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 30);
+            }
+            function fechar() {
+                painel.classList.remove('open'); trigger.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false');
+            }
+            dropdownsAbertos.push(fechar);
+
+            function escolher(i) {
+                const o = opcoes()[i];
+                if (!o) return;
+                select.value = o.value;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                render(); fechar(); trigger.focus();
+                if (REGRAS[select.id]) validarCampo(select.id);
+            }
+
+            trigger.addEventListener('click', function() { painel.classList.contains('open') ? fechar() : abrir(); });
+            trigger.addEventListener('keydown', function(e) {
+                const aberto = painel.classList.contains('open');
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (!aberto) abrir(); else destacar(ativo + (e.key === 'ArrowDown' ? 1 : -1));
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (!aberto) abrir(); else escolher(ativo);
+                } else if (e.key === 'Escape') { if (aberto) { e.preventDefault(); fechar(); } }
+                else if (e.key === 'Tab') { fechar(); }
+            });
+            document.addEventListener('click', function(e) { if (!grupo.contains(e.target)) fechar(); });
+            if (label) label.addEventListener('click', function(e) { e.preventDefault(); if (!trigger.disabled) trigger.focus(); });
+
+            select.addEventListener('change', render);
+            new MutationObserver(render).observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });
+            render();
+        }
+
         function carregarIdades() {
             const selectIdade = document.getElementById('idade');
             selectIdade.innerHTML = '<option value="">Selecione a idade</option>';
@@ -518,6 +866,8 @@
                             option.value = turma.nome;
                             const dias = turma.data ? turma.data : '';
                             option.textContent = `${turma.nome} - Dias: ${dias} (${MES_ABREV})`;
+                            option.dataset.titulo = turma.nome;
+                            option.dataset.sub = `Dias: ${dias} (${MES_ABREV})`;
                             selectTurma.appendChild(option);
                         });
                     }
@@ -559,6 +909,8 @@
         
         function enviarFormulario(event) {
             event.preventDefault();
+
+            if (!validarFormulario()) return;
             
             const formData = {
                 nomeAluno: document.getElementById('nomeAluno').value,
@@ -597,7 +949,7 @@
                 .catch(error => {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('errorMessage').textContent =
-                        'Erro ao processar inscrição: ' + error.message;
+                        'Erro ao processar inscrição: ' + error.message.replace(/^Erro ao processar inscrição:\s*/, '');
                     document.getElementById('errorMessage').style.display = 'block';
                     document.getElementById('submitBtn').disabled = false;
 
