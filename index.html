@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colônia de Férias CNA - Inscrição</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #EC193F; --red-dark: #C9102F; --navy: #2A2A78; --navy-dark: #1F1B5A;
+            --bg: #F6F6FB; --text: #4A4A63; --line: #E4E4EF; --radius: 20px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+
+        .topbar { background: var(--red); color: #fff; text-align: center; font-size: 0.8rem; font-weight: 600; padding: 0.55rem 1rem; }
+        .site-header { background: #fff; display: flex; justify-content: center; padding: 0.9rem 1rem; box-shadow: 0 2px 12px rgba(42,42,120,0.06); }
+        .site-logo { height: 34px; width: auto; display: block; }
+
+        .page { max-width: 760px; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
+        .card { background: #fff; border-radius: var(--radius); box-shadow: 0 6px 24px rgba(42,42,120,0.08); padding: 1.5rem; margin-bottom: 1.25rem; }
+
+        /* HERO */
+        .hero { position: relative; overflow: hidden; background: linear-gradient(135deg, #EC193F 0%, #C9102F 100%); color: #fff; border-radius: var(--radius); padding: 1.75rem 1.5rem; margin-bottom: 1.5rem; }
+        .hero::before { content: ''; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; border: 28px solid rgba(255,255,255,0.10); }
+        .hero::after { content: ''; position: absolute; right: 40px; bottom: -90px; width: 180px; height: 180px; border-radius: 50%; border: 22px solid rgba(255,255,255,0.08); }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-chip { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 0.25rem 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.9rem; }
+        .hero h1 { font-size: clamp(1.6rem, 6vw, 2.3rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.6rem; }
+        .hero p { font-size: 1rem; opacity: 0.95; max-width: 30rem; }
+
+        .section-title { color: var(--navy); font-size: 1.35rem; font-weight: 800; line-height: 1.3; }
+        .section-sub { color: var(--text); font-size: 0.92rem; margin: 0.15rem 0 1rem; }
+
+        /* CURSOS */
+        .cursos { margin-bottom: 1.5rem; }
+        .cursos-grid { display: grid; grid-template-columns: 1fr; gap: 0.9rem; }
+        .curso-card { border-radius: var(--radius); padding: 1.1rem 1.15rem; display: flex; flex-direction: column; gap: 0.7rem; }
+        .curso-card.roblox { background: #D3EAFE; }
+        .curso-card.colonia { background: #FFF1B5; }
+        .curso-top { display: flex; align-items: center; gap: 0.75rem; }
+        .curso-emoji { width: 46px; height: 46px; flex: none; border-radius: 14px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 3px 10px rgba(42,42,120,0.10); }
+        .curso-card h3 { color: var(--navy); font-size: 1.1rem; font-weight: 800; line-height: 1.25; }
+        .curso-card p { font-size: 0.9rem; color: #3b3b55; }
+        .pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .pill { background: rgba(255,255,255,0.8); color: var(--navy); border-radius: 999px; padding: 0.2rem 0.7rem; font-size: 0.78rem; font-weight: 600; }
+        .btn-detalhes { align-self: flex-start; background: var(--red); color: #fff; border: none; border-radius: 12px; padding: 0.65rem 1.1rem; font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; min-height: 44px; transition: background 0.2s, transform 0.1s; }
+        .btn-detalhes:hover { background: var(--red-dark); }
+        .btn-detalhes:active { transform: scale(0.97); }
+
+        /* JANELA DE DETALHES */
+        dialog { border: none; border-radius: var(--radius); padding: 0; width: calc(100% - 2rem); max-width: 500px; margin: auto; box-shadow: 0 20px 60px rgba(31,27,90,0.35); color: var(--text); font-family: inherit; }
+        dialog::backdrop { background: rgba(31,27,90,0.55); }
+        .dlg-head { display: flex; align-items: center; gap: 0.75rem; padding: 1.1rem 1.25rem; }
+        .dlg-head.roblox { background: #D3EAFE; } .dlg-head.colonia { background: #FFF1B5; }
+        .dlg-head h3 { flex: 1; color: var(--navy); font-size: 1.1rem; font-weight: 800; line-height: 1.25; }
+        .dlg-close { width: 44px; height: 44px; flex: none; border: none; border-radius: 50%; background: #fff; color: var(--navy); font-size: 1.3rem; cursor: pointer; }
+        .dlg-body { padding: 1.25rem; }
+        .dlg-body > p { margin-bottom: 1rem; font-size: 0.95rem; }
+        .dlg-list { list-style: none; display: grid; gap: 0.5rem; margin-bottom: 1.25rem; }
+        .dlg-list li { display: flex; gap: 0.65rem; align-items: flex-start; background: var(--bg); border-radius: 12px; padding: 0.65rem 0.8rem; font-size: 0.9rem; }
+        .dlg-ok { width: 100%; background: var(--red); color: #fff; border: none; border-radius: 12px; padding: 0.85rem; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; }
+
+        /* PASSOS + AVISO */
+        .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 0.9rem 0; }
+        .steps li { text-align: center; font-size: 0.78rem; font-weight: 600; color: var(--navy); line-height: 1.3; }
+        .steps .n { display: flex; width: 32px; height: 32px; margin: 0 auto 0.35rem; border-radius: 50%; background: var(--red); color: #fff; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
+        .note { background: #FFF7DB; border-radius: 12px; padding: 0.7rem 0.9rem; font-size: 0.85rem; color: #6b4e00; margin-bottom: 1.4rem; }
+
+        /* FORMULÁRIO */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .form-section { display: flex; align-items: center; gap: 0.6rem; color: var(--navy); font-weight: 800; font-size: 1.02rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--line); margin-top: 0.4rem; }
+        .form-section:first-child { margin-top: 0; }
+        .form-section .step { width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--navy); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .form-group label { display: block; color: var(--navy); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .form-group input, .form-group select { width: 100%; height: 50px; padding: 0 0.9rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-family: inherit; font-size: 1rem; color: #222; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-group input::placeholder { color: #a3a3b8; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px rgba(236,25,63,0.12); }
+        .form-group select { appearance: none; -webkit-appearance: none; padding-right: 2.6rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232A2A78' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; }
+        .form-group select:disabled { background-color: #F1F1F7; color: #9a9ab0; cursor: not-allowed; }
+
+        .turma-info { background: #EAF4FF; border-radius: 14px; padding: 1rem 1.1rem; border-left: 5px solid var(--navy); }
+        .turma-info h3 { color: var(--navy); font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .info-item { display: flex; justify-content: space-between; gap: 1rem; padding: 0.4rem 0; border-bottom: 1px solid rgba(42,42,120,0.12); font-size: 0.9rem; }
+        .info-item:last-child { border-bottom: none; }
+        .info-label { font-weight: 600; color: var(--navy); }
+        .info-value { text-align: right; font-weight: 600; color: #222; }
+
+        .btn-submit { width: 100%; height: 54px; margin-top: 0.4rem; background: var(--red); color: #fff; border: none; border-radius: 14px; font-family: inherit; font-size: 1.02rem; font-weight: 700; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 8px 20px rgba(236,25,63,0.28); transition: background 0.2s, transform 0.1s; }
+        .btn-submit:hover:not(:disabled) { background: var(--red-dark); }
+        .btn-submit:active:not(:disabled) { transform: scale(0.98); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .loading { display: none; text-align: center; color: var(--navy); font-weight: 600; padding: 1rem 0 0; }
+        .loading::before { content: ''; display: inline-block; width: 18px; height: 18px; margin-right: 8px; vertical-align: -3px; border: 3px solid var(--line); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .success-message, .error-message { display: none; border-radius: 12px; padding: 0.85rem 1rem; margin-top: 1rem; font-weight: 600; font-size: 0.92rem; }
+        .success-message { background: #DCFCE7; color: #166534; }
+        .error-message { background: #FEE2E2; color: #991B1B; }
+
+        /* TELAS DE STATUS (confirmação, encerrado, link inválido) */
+        .status-card { text-align: center; padding: 2rem 1.5rem; }
+        .status-card h1 { color: var(--navy); font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .status-card h2 { color: var(--navy); font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .status-card p { margin-bottom: 0.5rem; }
+        .status-icon { margin: 0.5rem 0 1rem; }
+        .badge-icon { width: 84px; height: 84px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 2.4rem; color: #fff; animation: pop 0.5s ease; }
+        .badge-icon.ok { background: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 8px 24px rgba(34,197,94,0.35); }
+        .badge-icon.warn { background: linear-gradient(135deg, var(--red), var(--red-dark)); box-shadow: 0 8px 24px rgba(236,25,63,0.3); }
+        .checkmark { width: 18px; height: 36px; border: solid #fff; border-width: 0 6px 6px 0; transform: rotate(45deg) translate(-3px, -3px); }
+        @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .email-destaque { display: inline-block; background: #EAF4FF; color: var(--navy); font-weight: 700; border-radius: 10px; padding: 0.4rem 0.9rem; word-break: break-all; }
+        .status-card .turma-info { text-align: left; margin: 1.25rem 0; }
+        .instructions-box { text-align: left; background: #FFF7DB; border-radius: 14px; padding: 1rem 1.1rem; margin: 1.25rem 0; }
+        .instructions-box h3 { color: #8a5a00; font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .instructions-box ul { margin-left: 1.1rem; font-size: 0.9rem; color: #6b4e00; }
+        .instructions-box li { margin-bottom: 0.3rem; }
+        .highlight-box { background: #EAF4FF; border-radius: 14px; padding: 1rem 1.1rem; margin: 1.25rem 0; color: var(--navy); font-weight: 600; font-size: 0.95rem; }
+        .contact-box { text-align: left; border: 2px solid var(--line); border-radius: 14px; padding: 1.1rem; margin-top: 1.25rem; }
+        .contact-box h3 { color: var(--navy); font-size: 1.02rem; font-weight: 800; text-align: center; margin-bottom: 0.4rem; }
+        .contact-box p { text-align: center; font-size: 0.88rem; }
+        .contact-item { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; background: var(--bg); border-radius: 10px; padding: 0.65rem 0.9rem; margin: 0.6rem 0; font-size: 0.9rem; }
+        .contact-label { font-weight: 600; color: var(--navy); }
+        .contact-value { font-weight: 800; color: var(--red); }
+
+        .site-footer { text-align: center; font-size: 0.78rem; color: #9a9ab0; padding: 0 1rem 2rem; }
+
+        @media (min-width: 640px) {
+            .page { padding-top: 1.75rem; }
+            .hero { padding: 2.25rem 2rem; }
+            .cursos-grid { grid-template-columns: 1fr 1fr; }
+            .card { padding: 2rem; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-grid > .form-section, .form-grid > .full, .form-grid > .btn-submit { grid-column: 1 / -1; }
+            .steps li { font-size: 0.85rem; }
+        }
+        @media (max-width: 480px) {
+            .info-item { flex-direction: column; gap: 0; }
+            .info-value { text-align: left; }
+            .contact-item { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">Colônia de Férias CNA · Inscrições Julho 2026</div>
+    <header class="site-header">
+        <img class="site-logo" src="data:image/png;base64,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" alt="CNA">
+    </header>
+
+    <main class="page">
+    <div id="mainContainer">
+
+        <section class="hero">
+            <span class="hero-chip">☀️ Férias · Julho 2026</span>
+            <h1>Cursos de Férias CNA</h1>
+            <p>Tecnologia, programação e criatividade para aproveitar as férias. Garanta sua vaga em poucos minutos!</p>
+        </section>
+
+        <section class="cursos">
+            <h2 class="section-title">Conheça os cursos</h2>
+            <p class="section-sub">Toque em <strong>Ver detalhes</strong> para saber tudo sobre cada curso.</p>
+            <div class="cursos-grid">
+                <div class="curso-card roblox">
+                    <div class="curso-top">
+                        <div class="curso-emoji">🎮</div>
+                        <h3>Curso de Roblox Studio de Férias</h3>
+                    </div>
+                    <p>Crie um jogo completo no Roblox Studio, mesmo sem nunca ter usado a plataforma.</p>
+                    <div class="pills"><span class="pill">⏱️ 4 aulas de 1h30</span><span class="pill">🎯 Do zero à publicação</span></div>
+                    <button type="button" class="btn-detalhes" onclick="document.getElementById('dlgRoblox').showModal()">Ver detalhes</button>
+                </div>
+                <div class="curso-card colonia">
+                    <div class="curso-top">
+                        <div class="curso-emoji">🚀</div>
+                        <h3>Colônia de Férias CNA</h3>
+                    </div>
+                    <p>Cada dia é uma nova aventura tecnológica, com projetos diferentes de programação e robótica.</p>
+                    <div class="pills"><span class="pill">⏱️ 4 aulas de 1h30</span><span class="pill">🎨 4 projetos diferentes</span></div>
+                    <button type="button" class="btn-detalhes" onclick="document.getElementById('dlgColonia').showModal()">Ver detalhes</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 class="section-title">Faça sua inscrição</h2>
+            <ol class="steps">
+                <li><span class="n">1</span>Preencha seus dados</li>
+                <li><span class="n">2</span>Escolha a turma</li>
+                <li><span class="n">3</span>Confira seu e-mail</li>
+            </ol>
+            <p class="note">💡 Quer fazer os dois cursos? Envie o formulário <strong>duas vezes</strong>, uma para cada curso. As vagas são limitadas!</p>
+
+            <form id="inscriptionForm" class="form-grid">
+                <input type="hidden" id="unidade" name="unidade">
+
+                <div class="form-section"><span class="step">1</span> Dados do aluno e do responsável</div>
+
+                <div class="form-group full">
+                    <label for="nomeAluno">Nome do Aluno *</label>
+                    <input type="text" id="nomeAluno" name="nomeAluno" required autocomplete="off">
+                </div>
+
+                <div class="form-group full">
+                    <label for="nomeResponsavel">Nome do Responsável *</label>
+                    <input type="text" id="nomeResponsavel" name="nomeResponsavel" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefoneContato">Telefone de Contato *</label>
+                    <input type="tel" id="telefoneContato" name="telefoneContato" required inputmode="tel" autocomplete="tel" minlength="14" title="Informe DDD + número" placeholder="(XX) XXXXX-XXXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="emailResponsavel">Email do Responsável *</label>
+                    <input type="email" id="emailResponsavel" name="emailResponsavel" required autocomplete="email" placeholder="email@exemplo.com">
+                </div>
+
+                <div class="form-section"><span class="step">2</span> Escolha da turma</div>
+
+                <div class="form-group">
+                    <label for="idade">Idade *</label>
+                    <select id="idade" name="idade" required>
+                        <option value="">Selecione a idade</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="periodo">Período *</label>
+                    <select id="periodo" name="periodo" required disabled>
+                        <option value="">Selecione primeiro a idade</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label for="turma">Turma *</label>
+                    <select id="turma" name="turma" required disabled>
+                        <option value="">Selecione primeiro o período</option>
+                    </select>
+                </div>
+
+                <div class="form-group full" id="turmaInfoCard" style="display: none;">
+                    <div class="turma-info">
+                        <h3>📋 Informações da Turma</h3>
+                        <div class="info-item"><span class="info-label">Turma:</span><span class="info-value" id="infoTurma">-</span></div>
+                        <div class="info-item"><span class="info-label">Horário:</span><span class="info-value" id="infoHorario">-</span></div>
+                        <div class="info-item"><span class="info-label">Datas:</span><span class="info-value" id="infoDatas">-</span></div>
+                        <div class="info-item"><span class="info-label">Dia da Semana:</span><span class="info-value" id="infoDiaSemana">-</span></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">Enviar Inscrição</button>
+            </form>
+
+            <div class="loading" id="loading">Processando sua inscrição...</div>
+            <div class="success-message" id="successMessage">Inscrição realizada com sucesso! Entraremos em contato em breve.</div>
+            <div class="error-message" id="errorMessage">Ocorreu um erro ao processar sua inscrição. Tente novamente.</div>
+        </section>
+    </div>
+
+    <!-- TELA DE CONFIRMAÇÃO DE INSCRIÇÃO -->
+    <div class="card status-card" id="confirmationScreen" style="display: none;">
+        <div class="status-icon"><div class="badge-icon ok"><div class="checkmark"></div></div></div>
+        <h1>Inscrição realizada com sucesso!</h1>
+        <p>🎉 Parabéns! Sua inscrição foi confirmada.</p>
+        <p>Enviamos todos os detalhes da turma e as informações de acesso para o e-mail:</p>
+        <p class="email-destaque" id="confirmacaoEmail"></p>
+
+        <div class="turma-info" id="confirmacaoTurmaInfo">
+            <h3>📋 Resumo da Sua Turma</h3>
+            <div class="info-item"><span class="info-label">Turma:</span><span class="info-value" id="confirmacaoTurma">-</span></div>
+            <div class="info-item"><span class="info-label">Horário:</span><span class="info-value" id="confirmacaoHorario">-</span></div>
+            <div class="info-item"><span class="info-label">Datas:</span><span class="info-value" id="confirmacaoDatas">-</span></div>
+            <div class="info-item"><span class="info-label">Dia da Semana:</span><span class="info-value" id="confirmacaoDiaSemana">-</span></div>
+        </div>
+
+        <div class="instructions-box">
+            <h3>📌 Informações Importantes</h3>
+            <ul>
+                <li>Verifique sua caixa de entrada e a pasta de spam para garantir que recebeu nosso e-mail</li>
+                <li>Guarde o e-mail com as informações de acesso para as aulas</li>
+                <li>Os links de acesso ficarão disponíveis a partir da data de início das aulas</li>
+                <li>A partir do primeiro dia, acesse o link 5 minutos antes do horário para garantir sua entrada</li>
+            </ul>
+        </div>
+
+        <div class="contact-box">
+            <h3>❓ Dúvidas? Estamos aqui para ajudar!</h3>
+            <p>Entre em contato com a nossa equipe:</p>
+            <div class="contact-item">
+                <span class="contact-label">📞 Ligações e WhatsApp:</span>
+                <span class="contact-value">11 4000-2231</span>
+            </div>
+            <p>Atendemos de segunda a sexta, das 9h às 20h. Sábado, das 9h às 13h.</p>
+        </div>
+    </div>
+
+    <!-- TELA DE INSCRIÇÕES ENCERRADAS (aparece quando INSCRICOES_ABERTAS = false) -->
+    <div class="card status-card" id="closedScreen" style="display: none;">
+        <div class="status-icon"><div class="badge-icon warn">⏰</div></div>
+        <h2>Inscrições Encerradas!</h2>
+        <p>Infelizmente, o período de inscrições chegou ao fim.</p>
+        <div class="highlight-box">🚀 Fique atento ao seu e-mail! Se você já garantiu a sua inscrição, os detalhes de acesso e início das aulas já foram enviados para lá.</div>
+        <div class="contact-box">
+            <h3>❓ Perdeu o prazo ou precisa de ajuda?</h3>
+            <p>Entre em contato com a nossa equipe:</p>
+            <div class="contact-item">
+                <span class="contact-label">📞 Ligações e WhatsApp:</span>
+                <span class="contact-value">11 4000-2231</span>
+            </div>
+            <p>Atendemos de segunda a sexta, das 9h às 20h. Sábado, das 9h às 13h.</p>
+        </div>
+    </div>
+
+    <!-- TELA DE LINK INVÁLIDO (aparece quando a URL não tem uma unidade válida) -->
+    <div class="card status-card" id="linkInvalido" style="display: none;">
+        <div class="status-icon"><div class="badge-icon warn">🔗</div></div>
+        <h2>Link de inscrição inválido</h2>
+        <p>Não foi possível identificar a sua unidade. Peça à sua escola o link de inscrição correto.</p>
+        <div class="contact-box">
+            <h3>❓ Precisa de ajuda?</h3>
+            <p>Entre em contato com a nossa equipe:</p>
+            <div class="contact-item">
+                <span class="contact-label">📞 Ligações e WhatsApp:</span>
+                <span class="contact-value">11 4000-2231</span>
+            </div>
+            <p>Atendemos de segunda a sexta, das 9h às 20h. Sábado, das 9h às 13h.</p>
+        </div>
+    </div>
+    </main>
+
+    <footer class="site-footer">CNA · Cursos de Férias 2026</footer>
+
+    <dialog id="dlgRoblox">
+        <div class="dlg-head roblox">
+            <div class="curso-emoji">🎮</div>
+            <h3>Curso de Roblox Studio de Férias</h3>
+            <button type="button" class="dlg-close" aria-label="Fechar" onclick="this.closest('dialog').close()">✕</button>
+        </div>
+        <div class="dlg-body">
+            <p>Aprenda a criar um jogo completo dentro do Roblox Studio — mesmo que nunca tenha utilizado a plataforma antes!</p>
+            <ul class="dlg-list"><li><span>⏱️</span><span>4 aulas de 1h30 (total de 6 horas)</span></li><li><span>🎯</span><span>Desenvolve um parkour do zero até a publicação</span></li><li><span>💻</span><span>Explora programação, design de fases e criatividade</span></li><li><span>👥</span><span>Perfeito para iniciantes e alunos que já conhecem Roblox Studio</span></li></ul>
+            <button type="button" class="dlg-ok" onclick="this.closest('dialog').close()">Entendi</button>
+        </div>
+    </dialog>
+    <dialog id="dlgColonia">
+        <div class="dlg-head colonia">
+            <div class="curso-emoji">🚀</div>
+            <h3>Colônia de Férias CNA</h3>
+            <button type="button" class="dlg-close" aria-label="Fechar" onclick="this.closest('dialog').close()">✕</button>
+        </div>
+        <div class="dlg-body">
+            <p>Cada dia é uma nova aventura tecnológica! São 4 projetos diferentes usando várias ferramentas utilizadas nas aulas de programação e robótica.</p>
+            <ul class="dlg-list"><li><span>⏱️</span><span>4 aulas de 1h30 (total de 6 horas)</span></li><li><span>🎨</span><span>4 projetos diferentes e independentes</span></li><li><span>🔧</span><span>Uso de diversas ferramentas</span></li><li><span>🌟</span><span>Explora programação, jogos e criatividade de forma divertida</span></li></ul>
+            <button type="button" class="dlg-ok" onclick="this.closest('dialog').close()">Entendi</button>
+        </div>
+    </dialog>
+
+    <script>
+        
+        // ==============================================================
+        // CHAVE DAS INSCRIÇÕES: true = formulário aberto | false = "Inscrições Encerradas"
+        // ==============================================================
+        const INSCRICOES_ABERTAS = true;
+
+        // ==============================================================
+        // UNIDADES: cada unidade tem o seu link  ->  index.html?unidade=<código>
+        // Para criar outro formulário, basta adicionar uma linha aqui:
+        //   'código-no-link': 'Nome que será gravado na coluna Unidade da planilha'
+        // ==============================================================
+        const UNIDADES = {
+            'digital-school': 'Digital School',
+            'conecta': 'Conecta',
+            'rede': 'Rede'
+        };
+
+        function normalizarSlug(txt) {
+            return String(txt || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase().trim().replace(/[\s_]+/g, '-');
+        }
+
+        // URL do Web App do Google Apps Script (termina em /exec)
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxmaGnV3CWkg3n8G4uULxmi3GYD2ZuK9nOygEt4I2FpGkVdR6my-To2mRX_UD45f-I0/exec';
+
+        let turmasDisponiveis = [];
+        let turmaSelecionadaInfo = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!INSCRICOES_ABERTAS) {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('closedScreen').style.display = 'block';
+                document.title = 'Inscrições Encerradas Jul-26';
+                return;
+            }
+
+            
+            // Unidade: vem da URL (?unidade=conecta). Cada unidade tem o seu link.
+            const params = new URLSearchParams(window.location.search);
+            const unidadeNome = UNIDADES[normalizarSlug(params.get('unidade') || params.get('u'))];
+            if (!unidadeNome) {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('linkInvalido').style.display = 'block';
+                document.title = 'Link inválido - Inscrição CNA';
+                return;
+            }
+            document.getElementById('unidade').value = unidadeNome;
+
+            carregarIdades();
+
+            document.getElementById('telefoneContato').addEventListener('input', function() {
+                let d = this.value.replace(/\D/g, '');
+                if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
+                d = d.slice(0, 11);
+                let v = d;
+                if (d.length > 10)      v = d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+                else if (d.length > 6)  v = d.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                else if (d.length > 2)  v = d.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+                else if (d.length > 0)  v = '(' + d;
+                this.value = v;
+            });
+            
+            document.getElementById('idade').addEventListener('change', carregarPeriodos);
+            document.getElementById('periodo').addEventListener('change', carregarTurmas);
+            document.getElementById('turma').addEventListener('change', exibirInformacoesTurma);
+            document.getElementById('inscriptionForm').addEventListener('submit', enviarFormulario);
+        });
+        
+        function carregarIdades() {
+            const selectIdade = document.getElementById('idade');
+            selectIdade.innerHTML = '<option value="">Selecione a idade</option>';
+            
+            const idades = [
+                { value: 'até 09 anos', text: 'até 09 anos' },
+                { value: 'de 10 até 13 anos', text: 'de 10 até 13 anos' },
+                { value: 'de 14 até 17 anos', text: 'de 14 até 17 anos' }
+            ];
+            
+            idades.forEach(idade => {
+                const option = document.createElement('option');
+                option.value = idade.value;
+                option.textContent = idade.text;
+                selectIdade.appendChild(option);
+            });
+        }
+        
+        function carregarPeriodos() {
+            const selectPeriodo = document.getElementById('periodo');
+            const idadeSelecionada = document.getElementById('idade').value;
+            
+            document.getElementById('turma').innerHTML = '<option value="">Selecione primeiro o período</option>';
+            document.getElementById('turma').disabled = true;
+            
+            if (!idadeSelecionada) {
+                selectPeriodo.disabled = true;
+                selectPeriodo.innerHTML = '<option value="">Selecione primeiro a idade</option>';
+                return;
+            }
+            
+            selectPeriodo.disabled = false;
+            selectPeriodo.innerHTML = '<option value="">Selecione o período</option>';
+            
+            const periodos = [
+                { value: 'Manhã', text: 'Manhã' },
+                { value: 'Tarde', text: 'Tarde' },
+                { value: 'Noite', text: 'Noite' }
+            ];
+            
+            periodos.forEach(periodo => {
+                const option = document.createElement('option');
+                option.value = periodo.value;
+                option.textContent = periodo.text;
+                selectPeriodo.appendChild(option);
+            });
+        }
+        
+        function carregarTurmas() {
+            const selectTurma = document.getElementById('turma');
+            const idadeSelecionada = document.getElementById('idade').value;
+            const periodoSelecionado = document.getElementById('periodo').value;
+            
+            if (!idadeSelecionada || !periodoSelecionado) {
+                selectTurma.disabled = true;
+                selectTurma.innerHTML = '<option value="">Selecione primeiro o período</option>';
+                return;
+            }
+            
+            selectTurma.disabled = true;
+            selectTurma.innerHTML = '<option value="">Carregando turmas...</option>';
+            
+            const url = API_URL + '?action=turmas'
+                + '&idade=' + encodeURIComponent(idadeSelecionada)
+                + '&periodo=' + encodeURIComponent(periodoSelecionado);
+
+            fetch(url)
+                .then(r => r.json())
+                .then(resp => {
+                    if (!resp.success) throw new Error(resp.error || 'Erro desconhecido');
+                    const turmas = resp.turmas;
+                    turmasDisponiveis = turmas;
+                    selectTurma.innerHTML = '<option value="">Selecione a turma</option>';
+
+                    if (turmas.length === 0) {
+                        selectTurma.innerHTML = '<option value="">Nenhuma turma disponível</option>';
+                    } else {
+                        turmas.forEach(turma => {
+                            const option = document.createElement('option');
+                            option.value = turma.nome;
+                            const dias = turma.data ? turma.data : '';
+                            option.textContent = `${turma.nome} - Dias: ${dias} (Jul-26)`;
+                            selectTurma.appendChild(option);
+                        });
+                    }
+                    selectTurma.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar turmas:', error);
+                    selectTurma.innerHTML = '<option value="">Erro ao carregar turmas</option>';
+                    selectTurma.disabled = true;
+                });
+        }
+        
+        function exibirInformacoesTurma() {
+            const turmaSelecionada = document.getElementById('turma').value;
+            const infoCard = document.getElementById('turmaInfoCard');
+            
+            if (!turmaSelecionada || !turmasDisponiveis.length) {
+                infoCard.style.display = 'none';
+                turmaSelecionadaInfo = null;
+                return;
+            }
+            
+            const turmaInfo = turmasDisponiveis.find(turma => turma.nome === turmaSelecionada);
+            
+            if (turmaInfo) {
+                document.getElementById('infoTurma').textContent = turmaInfo.nome;
+                document.getElementById('infoHorario').textContent = turmaInfo.horario || 'Não informado';
+                document.getElementById('infoDatas').textContent = turmaInfo.data ? `${turmaInfo.data} de Julho de 2026` : 'Não informado';
+                document.getElementById('infoDiaSemana').textContent = turmaInfo.diaSemana || 'Não informado';
+                
+                infoCard.style.display = 'block';
+                setTimeout(() => infoCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+                turmaSelecionadaInfo = turmaInfo;
+            } else {
+                infoCard.style.display = 'none';
+                turmaSelecionadaInfo = null;
+            }
+        }
+        
+        function enviarFormulario(event) {
+            event.preventDefault();
+            
+            const formData = {
+                nomeAluno: document.getElementById('nomeAluno').value,
+                nomeResponsavel: document.getElementById('nomeResponsavel').value,
+                telefoneContato: document.getElementById('telefoneContato').value,
+                emailResponsavel: document.getElementById('emailResponsavel').value,
+                idade: document.getElementById('idade').value,
+                periodo: document.getElementById('periodo').value,
+                turma: document.getElementById('turma').value,
+                unidade: document.getElementById('unidade').value
+            };
+            
+            if (!formData.nomeAluno || !formData.nomeResponsavel || !formData.telefoneContato || 
+                !formData.emailResponsavel || !formData.idade || !formData.periodo || !formData.turma) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            
+            // text/plain evita o preflight de CORS, que o Apps Script não responde
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(formData)
+            })
+                .then(r => r.json())
+                .then(resp => {
+                    if (!resp.success) throw new Error(resp.error || 'Erro desconhecido');
+                    document.getElementById('loading').style.display = 'none';
+                    exibirTelaConfirmacao(formData);
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('errorMessage').textContent =
+                        'Erro ao processar inscrição: ' + error.message;
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('submitBtn').disabled = false;
+
+                    setTimeout(() => {
+                        document.getElementById('errorMessage').style.display = 'none';
+                    }, 5000);
+                });
+        }
+
+        function exibirTelaConfirmacao(formData) {
+            // Esconder formulário e mostrar tela de confirmação
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('confirmationScreen').style.display = 'block';
+            
+            // Preencher email cadastrado
+            document.getElementById('confirmacaoEmail').textContent = formData.emailResponsavel;
+            
+            // Preencher informações da turma se disponíveis
+            if (turmaSelecionadaInfo) {
+                document.getElementById('confirmacaoTurma').textContent = turmaSelecionadaInfo.nome;
+                document.getElementById('confirmacaoHorario').textContent = turmaSelecionadaInfo.horario || 'Não informado';
+                document.getElementById('confirmacaoDatas').textContent = turmaSelecionadaInfo.data ? `${turmaSelecionadaInfo.data} de Julho de 2026` : 'Não informado';
+                document.getElementById('confirmacaoDiaSemana').textContent = turmaSelecionadaInfo.diaSemana || 'Não informado';
+            } else {
+                // Fallback caso não tenha as informações da turma
+                document.getElementById('confirmacaoTurma').textContent = formData.turma;
+                document.getElementById('confirmacaoHorario').textContent = 'Consulte email para detalhes';
+                document.getElementById('confirmacaoDatas').textContent = 'Consulte email para detalhes';
+                document.getElementById('confirmacaoDiaSemana').textContent = 'Consulte email para detalhes';
+            }
+            
+            // Scroll para o topo
+            window.scrollTo(0, 0);
+        }
+    
+        // Janelas "Ver detalhes" dos cursos: fecha ao clicar fora
+        document.querySelectorAll('dialog').forEach(function(d) {
+            d.addEventListener('click', function(e) { if (e.target === d) d.close(); });
+        });
+    </script>
+</body>
+</html>
