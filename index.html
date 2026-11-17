@@ -15,7 +15,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
 
-        .topbar { background: var(--red); color: #fff; text-align: center; font-size: 0.8rem; font-weight: 600; padding: 0.55rem 1rem; }
+        .topbar { background: var(--red-dark); color: #fff; text-align: center; font-size: 0.8rem; font-weight: 600; padding: 0.55rem 1rem; }
         .site-header { background: #fff; display: flex; justify-content: center; padding: 0.9rem 1rem; box-shadow: 0 2px 12px rgba(42,42,120,0.06); }
         .site-logo { height: 34px; width: auto; display: block; }
 
@@ -27,7 +27,7 @@
         .hero::before { content: ''; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; border: 28px solid rgba(255,255,255,0.10); }
         .hero::after { content: ''; position: absolute; right: 40px; bottom: -90px; width: 180px; height: 180px; border-radius: 50%; border: 22px solid rgba(255,255,255,0.08); }
         .hero > * { position: relative; z-index: 1; }
-        .hero-chip { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 0.25rem 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.9rem; }
+        .hero-chip { display: inline-block; background: rgba(90,0,15,0.28); border-radius: 999px; padding: 0.25rem 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.9rem; }
         .hero h1 { font-size: clamp(1.6rem, 6vw, 2.3rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.6rem; }
         .hero p { font-size: 1rem; opacity: 0.95; max-width: 30rem; }
 
@@ -76,10 +76,10 @@
         .form-section .step { width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--navy); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
         .form-group label { display: block; color: var(--navy); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; }
         .form-group input, .form-group select { width: 100%; height: 50px; padding: 0 0.9rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-family: inherit; font-size: 1rem; color: #222; transition: border-color 0.2s, box-shadow 0.2s; }
-        .form-group input::placeholder { color: #a3a3b8; }
+        .form-group input::placeholder { color: #6F6F8A; }
         .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px rgba(236,25,63,0.12); }
         .form-group select { appearance: none; -webkit-appearance: none; padding-right: 2.6rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232A2A78' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; }
-        .form-group select:disabled { background-color: #F1F1F7; color: #9a9ab0; cursor: not-allowed; }
+        .form-group select:disabled { background-color: #F1F1F7; color: #7B7B94; cursor: not-allowed; }
 
         .turma-info { background: #EAF4FF; border-radius: 14px; padding: 1rem 1.1rem; border-left: 5px solid var(--navy); }
         .turma-info h3 { color: var(--navy); font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
@@ -123,9 +123,9 @@
         .contact-box p { text-align: center; font-size: 0.88rem; }
         .contact-item { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; background: var(--bg); border-radius: 10px; padding: 0.65rem 0.9rem; margin: 0.6rem 0; font-size: 0.9rem; }
         .contact-label { font-weight: 600; color: var(--navy); }
-        .contact-value { font-weight: 800; color: var(--red); }
+        .contact-value { font-weight: 800; color: var(--red-dark); }
 
-        .site-footer { text-align: center; font-size: 0.78rem; color: #9a9ab0; padding: 0 1rem 2rem; }
+        .site-footer { text-align: center; font-size: 0.78rem; color: #6b6b85; padding: 0 1rem 2rem; }
 
         @media (min-width: 640px) {
             .page { padding-top: 1.75rem; }
@@ -156,12 +156,12 @@
         .select-native { position: absolute !important; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
         .cs-trigger { width: 100%; height: 50px; padding: 0 2.6rem 0 0.9rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-family: inherit; font-size: 1rem; color: #222; text-align: left; cursor: pointer; display: flex; align-items: center; position: relative; transition: border-color 0.2s, box-shadow 0.2s; }
         .cs-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .cs-trigger.placeholder .cs-value { color: #a3a3b8; }
+        .cs-trigger.placeholder .cs-value { color: #6F6F8A; }
         .cs-arrow { position: absolute; right: 1.1rem; top: 50%; width: 9px; height: 9px; border-right: 2.5px solid var(--navy); border-bottom: 2.5px solid var(--navy); transform: translateY(-70%) rotate(45deg); transition: transform 0.2s; }
         .cs-trigger.open .cs-arrow { transform: translateY(-30%) rotate(-135deg); }
         .cs-trigger:focus-visible, .cs-trigger.open { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px rgba(236,25,63,0.12); }
-        .cs-trigger:disabled { background: #F1F1F7; color: #9a9ab0; cursor: not-allowed; }
-        .cs-trigger:disabled .cs-arrow { border-color: #b8b8cc; }
+        .cs-trigger:disabled { background: #F1F1F7; color: #7B7B94; cursor: not-allowed; }
+        .cs-trigger:disabled .cs-arrow { border-color: #9a9ab0; }
         .cs-panel { display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; margin: 0; padding: 6px; list-style: none; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(42,42,120,0.2); max-height: 280px; overflow-y: auto; }
         .cs-panel.open { display: block; animation: csIn 0.12s ease-out; }
         @keyframes csIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
@@ -173,6 +173,13 @@
         .cs-opt[aria-selected="true"]::after { content: '✓'; font-weight: 800; color: var(--red); }
         .cs-empty { padding: 0.85rem; color: #6b6b85; font-size: 0.9rem; }
 
+
+        /* ===== AUTORIZAÇÃO, ANTI-ROBÔ, TENTAR NOVAMENTE ===== */
+        .form-group label.consent { display: flex; gap: 0.7rem; align-items: flex-start; margin: 0; padding: 0.85rem 0.95rem; background: var(--bg); border-radius: 12px; border: 1.5px solid var(--line); font-size: 0.85rem; font-weight: 500; line-height: 1.5; color: var(--text); cursor: pointer; }
+        .form-group input[type="checkbox"] { flex: none; width: 22px; height: 22px; padding: 0; margin-top: 2px; accent-color: var(--red); box-shadow: none; cursor: pointer; }
+        .form-group.has-error label.consent { border-color: #DC2626; background: #FFF5F5; }
+        .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        .field-sugestao.retry { color: #B91C1C; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -197,7 +204,7 @@
                 <div class="curso-card roblox">
                     <div class="curso-top">
                         <div class="curso-emoji">🎮</div>
-                        <h3>Curso de Roblox Studio</h3>
+                        <h3>Curso de Roblox Studio de Férias</h3>
                     </div>
                     <p>Crie um jogo completo no Roblox Studio, mesmo sem nunca ter usado a plataforma.</p>
                     <div class="pills"><span class="pill">⏱️ 4 aulas de 1h30</span><span class="pill">🎯 Do zero à publicação</span></div>
@@ -226,6 +233,7 @@
 
             <form id="inscriptionForm" class="form-grid" novalidate>
                 <input type="hidden" id="unidade" name="unidade">
+                <div class="hp" aria-hidden="true"><label for="contatoAlt">Não preencha este campo</label><input type="text" id="contatoAlt" name="contatoAlt" tabindex="-1" autocomplete="off"></div>
 
                 <div class="form-section"><span class="step">1</span> Dados do aluno e do responsável</div>
 
@@ -279,6 +287,7 @@
                         <option value="">Selecione primeiro o período</option>
                     </select>
                     <div class="field-error" id="err-turma"></div>
+                    <div class="field-sugestao retry" id="retry-turma"></div>
                 </div>
 
                 <div class="form-group full" id="turmaInfoCard" style="display: none;">
@@ -289,6 +298,14 @@
                         <div class="info-item"><span class="info-label">Datas:</span><span class="info-value" id="infoDatas">-</span></div>
                         <div class="info-item"><span class="info-label">Dia da Semana:</span><span class="info-value" id="infoDiaSemana">-</span></div>
                     </div>
+                </div>
+
+                <div class="form-group full">
+                    <label class="consent" for="autorizacao">
+                        <input type="checkbox" id="autorizacao" name="autorizacao">
+                        <span>Declaro que sou o responsável pelo aluno (ou estou autorizado por ele) e autorizo esta inscrição. Estou de acordo com o uso dos dados informados apenas para a matrícula, o contato e o envio das informações do curso, conforme a Lei Geral de Proteção de Dados (LGPD).</span>
+                    </label>
+                    <div class="field-error" id="err-autorizacao"></div>
                 </div>
 
                 <button type="submit" class="btn-submit" id="submitBtn">Enviar Inscrição</button>
@@ -367,11 +384,11 @@
     <dialog id="dlgRoblox">
         <div class="dlg-head roblox">
             <div class="curso-emoji">🎮</div>
-            <h3>Curso de Roblox Studio</h3>
+            <h3>Curso de Roblox Studio de Férias</h3>
             <button type="button" class="dlg-close" aria-label="Fechar" onclick="this.closest('dialog').close()">✕</button>
         </div>
         <div class="dlg-body">
-            <p>Aprenda a criar um jogo completo dentro do Roblox Studio mesmo que nunca tenha utilizado a plataforma antes!</p>
+            <p>Aprenda a criar um jogo completo dentro do Roblox Studio — mesmo que nunca tenha utilizado a plataforma antes!</p>
             <ul class="dlg-list"><li><span>⏱️</span><span>4 aulas de 1h30 (total de 6 horas)</span></li><li><span>🎯</span><span>Desenvolve um parkour do zero até a publicação</span></li><li><span>💻</span><span>Explora programação, design de fases e criatividade</span></li><li><span>👥</span><span>Perfeito para iniciantes e alunos que já conhecem Roblox Studio</span></li></ul>
             <button type="button" class="dlg-ok" onclick="this.closest('dialog').close()">Entendi</button>
         </div>
@@ -423,7 +440,7 @@
         }
 
         // URL do Web App do Google Apps Script (termina em /exec)
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwozoyXNcA0cf0HwJiuMQklhSR2mH6iJqnd1CsB5YtdPOivzWH7VsKJP14HLgC0jJzt/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyETYqFp811NrwLu_j4GOcrqO6d3ttbveWujtB-9y3jvx0M4GRHSuJIdi7f_8t_-qMC/exec';
 
         let turmasDisponiveis = [];
         let turmaSelecionadaInfo = null;
@@ -472,6 +489,7 @@
                     if (el.closest('.form-group').classList.contains('has-error')) validarCampo(id);
                 });
             });
+            document.getElementById('autorizacao').addEventListener('change', function() { validarCampo('autorizacao'); });
             document.getElementById('emailResponsavel').addEventListener('input', function() {
                 emailAvisado = false;
                 document.getElementById('sug-emailResponsavel').textContent = '';
@@ -594,9 +612,10 @@
             emailResponsavel: validarEmail,
             idade: validarSelecao('Selecione a idade.'),
             periodo: validarSelecao('Selecione o período.'),
-            turma: validarSelecao('Selecione a turma.')
+            turma: validarSelecao('Selecione a turma.'),
+            autorizacao: validarSelecao('Marque a autorização para continuar.')
         };
-        const ORDEM_CAMPOS = ['nomeAluno', 'nomeResponsavel', 'telefoneContato', 'emailResponsavel', 'idade', 'periodo', 'turma'];
+        const ORDEM_CAMPOS = ['nomeAluno', 'nomeResponsavel', 'telefoneContato', 'emailResponsavel', 'idade', 'periodo', 'turma', 'autorizacao'];
         let emailAvisado = false;
 
         function mostrarErro(id, msg) {
@@ -607,7 +626,8 @@
         }
 
         function validarCampo(id) {
-            const msg = REGRAS[id](document.getElementById(id).value);
+            const el = document.getElementById(id);
+            const msg = REGRAS[id](el.type === 'checkbox' ? (el.checked ? '1' : '') : el.value);
             mostrarErro(id, msg);
             return !msg;
         }
@@ -784,6 +804,50 @@
             render();
         }
 
+
+        // ==============================================================
+        //  REDE: tentativas, tempo limite e mensagens claras
+        // ==============================================================
+        const PAGINA_ABERTA_EM = Date.now();
+        let enviando = false;
+
+        function fetchJsonComTentativas(url, tentativas, timeoutMs) {
+            return new Promise(function(resolve, reject) {
+                let n = 0;
+                (function tentar() {
+                    n++;
+                    const ctl = new AbortController();
+                    const timer = setTimeout(function() { ctl.abort(); }, timeoutMs);
+                    fetch(url, { signal: ctl.signal })
+                        .then(function(r) { clearTimeout(timer); return r.json(); })
+                        .then(resolve)
+                        .catch(function(err) {
+                            clearTimeout(timer);
+                            if (n < tentativas) setTimeout(tentar, 1000); else reject(err);
+                        });
+                })();
+            });
+        }
+
+        function mensagemErroEnvio(error) {
+            if (error && error.name === 'AbortError') {
+                return 'A conexão demorou demais. Tente enviar de novo: se a inscrição já tiver sido feita, ela não será duplicada.';
+            }
+            if (error instanceof TypeError) {
+                return 'Não foi possível conectar. Verifique sua internet e tente de novo: se a inscrição já tiver sido feita, ela não será duplicada.';
+            }
+            return 'Erro ao processar inscrição: ' + String(error && error.message || '').replace(/^Erro ao processar inscrição:\s*/, '');
+        }
+
+        function mostrarRetryTurmas() {
+            const alvo = document.getElementById('retry-turma');
+            alvo.textContent = 'Não foi possível carregar as turmas. Verifique sua internet. ';
+            const b = document.createElement('button');
+            b.type = 'button'; b.textContent = 'Tentar novamente';
+            b.addEventListener('click', function() { carregarTurmas(); });
+            alvo.appendChild(b);
+        }
+
         function carregarIdades() {
             const selectIdade = document.getElementById('idade');
             selectIdade.innerHTML = '<option value="">Selecione a idade</option>';
@@ -850,8 +914,9 @@
                 + '&idade=' + encodeURIComponent(idadeSelecionada)
                 + '&periodo=' + encodeURIComponent(periodoSelecionado);
 
-            fetch(url)
-                .then(r => r.json())
+            document.getElementById('retry-turma').textContent = '';
+
+            fetchJsonComTentativas(url, 2, 15000)
                 .then(resp => {
                     if (!resp.success) throw new Error(resp.error || 'Erro desconhecido');
                     const turmas = resp.turmas;
@@ -877,6 +942,7 @@
                     console.error('Erro ao carregar turmas:', error);
                     selectTurma.innerHTML = '<option value="">Erro ao carregar turmas</option>';
                     selectTurma.disabled = true;
+                    mostrarRetryTurmas();
                 });
         }
         
@@ -910,6 +976,7 @@
         function enviarFormulario(event) {
             event.preventDefault();
 
+            if (enviando) return;
             if (!validarFormulario()) return;
             
             const formData = {
@@ -922,7 +989,10 @@
                 turma: document.getElementById('turma').value,
                 unidade: document.getElementById('unidade').value,
                 mes: MES_COLONIA,
-                ano: String(ANO_COLONIA)
+                ano: String(ANO_COLONIA),
+                autorizacao: document.getElementById('autorizacao').checked,
+                contatoAlt: document.getElementById('contatoAlt').value,
+                tempoPreenchimento: Date.now() - PAGINA_ABERTA_EM
             };
             
             if (!formData.nomeAluno || !formData.nomeResponsavel || !formData.telefoneContato || 
@@ -933,14 +1003,18 @@
             
             document.getElementById('loading').style.display = 'block';
             document.getElementById('submitBtn').disabled = true;
+            enviando = true;
+            const controlador = new AbortController();
+            const timer = setTimeout(function() { controlador.abort(); }, 45000);
             
             // text/plain evita o preflight de CORS, que o Apps Script não responde
             fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                signal: controlador.signal
             })
-                .then(r => r.json())
+                .then(r => { clearTimeout(timer); return r.json(); })
                 .then(resp => {
                     if (!resp.success) throw new Error(resp.error || 'Erro desconhecido');
                     document.getElementById('loading').style.display = 'none';
@@ -949,13 +1023,15 @@
                 .catch(error => {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('errorMessage').textContent =
-                        'Erro ao processar inscrição: ' + error.message.replace(/^Erro ao processar inscrição:\s*/, '');
+                        mensagemErroEnvio(error);
                     document.getElementById('errorMessage').style.display = 'block';
                     document.getElementById('submitBtn').disabled = false;
+                    enviando = false;
+                    clearTimeout(timer);
 
                     setTimeout(() => {
                         document.getElementById('errorMessage').style.display = 'none';
-                    }, 5000);
+                    }, 12000);
                 });
         }
 
