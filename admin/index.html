@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Painel Administrativo - Colônia de Férias CNA</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23EC193F'/><text x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #EC193F; --red-dark: #C9102F; --navy: #2A2A78; --navy-dark: #1F1B5A;
+            --bg: #F6F6FB; --text: #4A4A63; --line: #E4E4EF; --radius: 20px;
+            --green: #16a34a; --amber: #d97706;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+
+        .topbar { background: var(--red-dark); color: #fff; text-align: center; font-size: 0.8rem; font-weight: 600; padding: 0.55rem 1rem; }
+        .site-header { background: #fff; display: flex; align-items: center; justify-content: center; gap: 0.8rem; padding: 0.9rem 1rem; box-shadow: 0 2px 12px rgba(42,42,120,0.06); }
+        .logo-txt { display: flex; align-items: center; gap: 0.6rem; }
+        .logo-badge { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--red), var(--red-dark)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; box-shadow: 0 4px 12px rgba(236,25,63,0.3); }
+        .logo-txt h1 { color: var(--navy); font-size: 1.15rem; font-weight: 800; line-height: 1.2; }
+        .logo-txt small { display: block; color: #6b6b85; font-size: 0.75rem; font-weight: 600; }
+        .header-right { display: flex; align-items: center; gap: 0.6rem; }
+
+        .page { max-width: 1080px; margin: 0 auto; padding: 1.25rem 1rem 2.5rem; }
+        .page-login { max-width: 430px; padding-top: 3rem; }
+        .card { background: #fff; border-radius: var(--radius); box-shadow: 0 6px 24px rgba(42,42,120,0.08); padding: 1.5rem; margin-bottom: 1.25rem; }
+
+        /* ===== ABAS DE NAVEGAÇÃO ===== */
+        .tabs { position: sticky; top: 0; z-index: 40; background: #fff; display: flex; gap: 0.25rem; overflow-x: auto; padding: 0.5rem 0.75rem; box-shadow: 0 2px 12px rgba(42,42,120,0.07); scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { white-space: nowrap; border: none; background: transparent; padding: 0.55rem 0.95rem; border-radius: 12px; font-family: inherit; font-weight: 600; color: var(--text); font-size: 0.9rem; cursor: pointer; transition: background 0.15s, color 0.15s; }
+        .tab:hover { background: var(--bg); }
+        .tab.active { background: var(--navy); color: #fff; }
+        .tab .count { display: inline-block; margin-left: 0.4rem; background: rgba(236,25,63,0.12); color: var(--red-dark); border-radius: 999px; font-size: 0.7rem; font-weight: 700; padding: 0 0.45rem; }
+        .tab.active .count { background: rgba(255,255,255,0.25); color: #fff; }
+
+        /* ===== BOTÕES ===== */
+        .btn { border: none; border-radius: 12px; padding: 0.65rem 1.15rem; font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; min-height: 44px; transition: background 0.2s, transform 0.1s; display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--red); color: #fff; box-shadow: 0 6px 16px rgba(236,25,63,0.25); }
+        .btn-primary:hover { background: var(--red-dark); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-outline { background: #fff; color: var(--navy); border: 1.5px solid var(--line); }
+        .btn-outline:hover { border-color: var(--navy); }
+        .btn-sm { padding: 0.35rem 0.7rem; min-height: 34px; font-size: 0.8rem; border-radius: 9px; }
+        .btn-icon { width: 34px; height: 34px; padding: 0; border-radius: 9px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; font-size: 0.95rem; display: inline-flex; align-items: center; justify-content: center; transition: border-color 0.15s, background 0.15s; }
+        .btn-icon:hover { border-color: var(--navy); background: var(--bg); }
+        .btn-icon.perigo:hover { border-color: var(--red); background: #FDECEF; }
+
+        /* ===== FORMULÁRIOS ===== */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 0.9rem; }
+        .form-group label { display: block; color: var(--navy); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; min-height: 46px; padding: 0.5rem 0.85rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-family: inherit; font-size: 0.95rem; color: #222; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-group textarea { min-height: 74px; resize: vertical; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px rgba(236,25,63,0.12); }
+        .form-group select { appearance: none; -webkit-appearance: none; padding-right: 2.6rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232A2A78' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0.9rem center; }
+        .field-hint { font-size: 0.75rem; color: #6b6b85; margin-top: 0.3rem; line-height: 1.4; }
+        .field-hint b { color: var(--navy); }
+
+        /* ===== LOGIN ===== */
+        .login-card h2 { color: var(--navy); font-size: 1.3rem; font-weight: 800; margin-bottom: 0.2rem; }
+        .login-card > p { font-size: 0.88rem; margin-bottom: 1.2rem; }
+        .login-card .form-group { margin-bottom: 0.9rem; }
+        .login-card .btn { width: 100%; height: 50px; margin-top: 0.4rem; }
+
+        .msg-erro { display: none; background: #FEE2E2; color: #991B1B; border-radius: 12px; padding: 0.7rem 0.9rem; font-weight: 600; font-size: 0.85rem; margin: 0.8rem 0 0; white-space: pre-line; }
+        .msg-erro.on { display: block; }
+        .msg-ok { display: none; background: #DCFCE7; color: #166534; border-radius: 12px; padding: 0.7rem 0.9rem; font-weight: 600; font-size: 0.85rem; margin: 0.8rem 0 0; }
+        .msg-ok.on { display: block; }
+
+        /* ===== DASHBOARD ===== */
+        .resumo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; margin-bottom: 1.25rem; }
+        .resumo-card { background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(42,42,120,0.07); padding: 0.95rem 1rem; }
+        .resumo-card .num { color: var(--navy); font-size: 1.7rem; font-weight: 800; line-height: 1.1; }
+        .resumo-card .lbl { font-size: 0.75rem; font-weight: 600; color: #6b6b85; }
+        .resumo-card.red .num { color: var(--red); }
+        .vagas-tres { display: flex; gap: 0.9rem; margin-top: 0.15rem; }
+        .vagas-tres div { line-height: 1.15; }
+        .vagas-tres .num { font-size: 1.25rem; }
+        .badge { display: inline-flex; align-items: center; gap: 0.3rem; border-radius: 999px; padding: 0.18rem 0.7rem; font-size: 0.75rem; font-weight: 700; }
+        .badge.abertas { background: #DCFCE7; color: #166534; }
+        .badge.fechadas { background: #FEE2E2; color: #991B1B; }
+        .badge.neutra { background: var(--bg); color: var(--navy); }
+        .badge.cheia { background: #FEE2E2; color: #991B1B; }
+        .badge.ultima { background: #FEF3C7; color: #92400E; }
+        .badge.ok { background: #DCFCE7; color: #166534; }
+
+        .prox-lista { list-style: none; display: grid; gap: 0.55rem; }
+        .prox-lista li { display: flex; gap: 0.8rem; align-items: center; background: var(--bg); border-radius: 14px; padding: 0.65rem 0.85rem; border-left: 5px solid var(--navy); }
+        .prox-lista li.t-plantao { border-left-color: var(--green); }
+        .prox-lista li.t-aulaExperimental { border-left-color: var(--amber); }
+        .prox-data { flex: none; text-align: center; min-width: 52px; }
+        .prox-data .dia { color: var(--navy); font-weight: 800; font-size: 1.05rem; line-height: 1.1; }
+        .prox-data .sem { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: #6b6b85; }
+        .prox-info { flex: 1; min-width: 0; }
+        .prox-info .tit { font-weight: 700; color: var(--navy); font-size: 0.88rem; line-height: 1.3; }
+        .prox-info .sub { font-size: 0.76rem; color: #6b6b85; }
+        .tipo-tag { display: inline-block; border-radius: 6px; padding: 0 0.4rem; font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-right: 0.35rem; background: rgba(42,42,120,0.1); color: var(--navy); }
+        .tipo-tag.t-plantao { background: rgba(22,163,74,0.12); color: #166534; }
+        .tipo-tag.t-aulaExperimental { background: rgba(217,119,6,0.14); color: #92400E; }
+
+        /* ===== LISTAS ===== */
+        .lista-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-bottom: 0.9rem; }
+        .lista-head h2 { color: var(--navy); font-size: 1.2rem; font-weight: 800; margin-right: auto; }
+        .filtros { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.9rem; }
+        .filtros input[type="search"], .filtros select { min-height: 42px; padding: 0.4rem 0.75rem; border: 1.5px solid var(--line); border-radius: 11px; background: #fff; font-family: inherit; font-size: 0.85rem; color: #222; }
+        .filtros input[type="search"] { flex: 1 1 200px; }
+        .filtros select { appearance: none; -webkit-appearance: none; padding-right: 2.2rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232A2A78' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0.75rem center; }
+        .contagem { font-size: 0.78rem; color: #6b6b85; font-weight: 600; margin-bottom: 0.6rem; }
+
+        .tabela-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 860px; }
+        th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 0.85rem; }
+        th { color: var(--navy); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+        td .t-nome { font-weight: 700; color: var(--navy); }
+        td .t-sub { font-size: 0.76rem; color: #6b6b85; }
+        td.acoes { white-space: nowrap; }
+        td.acoes .btn-icon { margin-right: 0.25rem; }
+        .mono { font-variant-numeric: tabular-nums; }
+
+        .cards-list { display: none; grid-gap: 0.7rem; }
+        .linha-card { background: var(--bg); border-radius: 14px; padding: 0.85rem 0.95rem; }
+        .linha-card .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.4rem; }
+        .linha-card .top .t-nome { font-size: 0.95rem; }
+        .linha-card .metas { display: grid; gap: 0.15rem; margin-bottom: 0.55rem; }
+        .meta { font-size: 0.8rem; color: #55556e; }
+        .meta b { color: var(--navy); font-weight: 600; }
+        .linha-card .acoes-linha { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+        .vazio { text-align: center; color: #6b6b85; padding: 1.6rem 1rem; font-size: 0.9rem; }
+        .carregando { text-align: center; color: var(--navy); font-weight: 600; padding: 2rem 0; }
+        .carregando::before { content: ''; display: inline-block; width: 18px; height: 18px; margin-right: 8px; vertical-align: -3px; border: 3px solid var(--line); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== DIÁLOGOS ===== */
+        dialog { border: none; border-radius: var(--radius); padding: 0; width: calc(100% - 2rem); max-width: 640px; margin: auto; box-shadow: 0 20px 60px rgba(31,27,90,0.35); color: var(--text); font-family: inherit; max-height: calc(100vh - 2rem); }
+        dialog::backdrop { background: rgba(31,27,90,0.55); }
+        .dlg-head { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: var(--navy); color: #fff; border-radius: var(--radius) var(--radius) 0 0; }
+        .dlg-head h3 { flex: 1; font-size: 1.05rem; font-weight: 800; line-height: 1.25; }
+        .dlg-close { width: 40px; height: 40px; flex: none; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); color: #fff; font-size: 1.2rem; cursor: pointer; }
+        .dlg-body { padding: 1.15rem 1.25rem; overflow-y: auto; max-height: calc(100vh - 9.5rem); }
+        .dlg-rodape { display: flex; gap: 0.6rem; justify-content: flex-end; padding: 0.9rem 1.25rem 1.15rem; border-top: 1px solid var(--line); }
+        .dlg-rodape .btn { min-width: 120px; }
+        .dlg-secao { color: var(--navy); font-weight: 700; font-size: 0.85rem; border-bottom: 2px solid var(--line); padding-bottom: 0.25rem; margin: 1.1rem 0 0.75rem; }
+        .dlg-secao:first-child { margin-top: 0; }
+
+        /* Grade de dias (datas da turma / dia do plantão) */
+        .grade-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; }
+        .dia-btn { border: 1.5px solid var(--line); background: #fff; border-radius: 10px; padding: 0.35rem 0 0.3rem; font-family: inherit; cursor: pointer; text-align: center; line-height: 1.15; transition: all 0.12s; }
+        .dia-btn .n { font-weight: 700; color: var(--navy); font-size: 0.9rem; display: block; }
+        .dia-btn .s { font-size: 0.62rem; color: #6b6b85; text-transform: uppercase; font-weight: 600; }
+        .dia-btn:hover { border-color: var(--navy); }
+        .dia-btn.sel { background: var(--red); border-color: var(--red); box-shadow: 0 4px 10px rgba(236,25,63,0.3); }
+        .dia-btn.sel .n { color: #fff; }
+        .dia-btn.sel .s { color: rgba(255,255,255,0.85); }
+
+        /* Professores por aula */
+        .radio-linha { display: flex; gap: 1.2rem; align-items: center; background: var(--bg); border-radius: 12px; padding: 0.6rem 0.9rem; flex-wrap: wrap; }
+        .radio-linha label { display: flex; gap: 0.4rem; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--navy); cursor: pointer; margin: 0; }
+        .radio-linha input[type="radio"] { width: 17px; height: 17px; accent-color: var(--red); }
+        .prof-aula-lista { display: grid; gap: 0.5rem; margin-top: 0.6rem; }
+        .prof-aula-item { display: flex; align-items: center; gap: 0.6rem; }
+        .prof-aula-item .rot { flex: none; width: 118px; font-size: 0.78rem; font-weight: 600; color: var(--navy); }
+        .prof-aula-item select { flex: 1; min-height: 42px; }
+
+        .previa-nome { background: #EAF4FF; border-left: 5px solid var(--navy); border-radius: 12px; padding: 0.6rem 0.85rem; font-size: 0.85rem; color: var(--navy); margin-top: 0.2rem; }
+        .previa-nome b { font-weight: 800; }
+        .previa-nome .sem-nome { color: #6b6b85; font-weight: 600; }
+
+        /* ===== TOAST ===== */
+        #toast { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); z-index: 200; display: grid; gap: 0.4rem; width: calc(100% - 2rem); max-width: 460px; }
+        .toast-item { border-radius: 12px; padding: 0.7rem 1rem; font-size: 0.85rem; font-weight: 600; box-shadow: 0 10px 30px rgba(31,27,90,0.25); animation: toastIn 0.2s ease-out; white-space: pre-line; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        .toast-ok { background: #166534; color: #fff; }
+        .toast-erro { background: #B91C1C; color: #fff; }
+        .toast-aviso { background: #92400E; color: #fff; }
+
+        .config-info { background: #EAF4FF; border-radius: 12px; padding: 0.7rem 0.9rem; font-size: 0.82rem; color: var(--navy); margin-bottom: 1rem; }
+
+        @media (min-width: 640px) {
+            .card { padding: 1.75rem; }
+            .form-grid.dois { grid-template-columns: 1fr 1fr; }
+            .form-grid.tres { grid-template-columns: 1fr 1fr 1fr; }
+            .form-grid .full { grid-column: 1 / -1; }
+            .site-header { justify-content: space-between; padding: 0.9rem 1.5rem; }
+        }
+        @media (max-width: 759px) {
+            .tabela-wrap { display: none; }
+            .cards-list { display: grid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">Colônia de Férias CNA · Painel Administrativo</div>
+    <header class="site-header">
+        <div class="logo-txt">
+            <div class="logo-badge">CNA</div>
+            <h1>Colônia de Férias<small>Painel Administrativo</small></h1>
+        </div>
+        <div class="header-right" id="headerSair" style="display:none">
+            <button class="btn btn-outline btn-sm" id="btnSair">Sair</button>
+        </div>
+    </header>
+
+    <!-- ============ LOGIN ============ -->
+    <main id="telaLogin" class="page page-login">
+        <div class="card login-card">
+            <h2>Entrar no painel</h2>
+            <p>Acesso exclusivo da coordenação.</p>
+            <form id="formLogin">
+                <div class="form-group">
+                    <label for="loginUsuario">Usuário</label>
+                    <input type="text" id="loginUsuario" autocomplete="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginSenha">Senha</label>
+                    <input type="password" id="loginSenha" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btnLogin">Entrar</button>
+                <div class="msg-erro" id="loginErro"></div>
+            </form>
+        </div>
+    </main>
+
+    <!-- ============ APP ============ -->
+    <div id="app" style="display:none">
+        <nav class="tabs" id="tabs">
+            <button class="tab active" data-view="dashboard">📊 Dashboard</button>
+            <button class="tab" data-view="turmas">🎓 Turmas <span class="count" id="cntTurmas">0</span></button>
+            <button class="tab" data-view="plantoes">🗓️ Plantões <span class="count" id="cntPlantoes">0</span></button>
+            <button class="tab" data-view="aulasexp">🧪 Aulas Exp. <span class="count" id="cntAulasExp">0</span></button>
+            <button class="tab" data-view="config">⚙️ Configurações</button>
+        </nav>
+
+        <main class="page">
+            <!-- DASHBOARD -->
+            <section id="view-dashboard">
+                <div id="dashConteudo"></div>
+            </section>
+
+            <!-- TURMAS -->
+            <section id="view-turmas" style="display:none">
+                <div class="card">
+                    <div class="lista-head">
+                        <h2>Turmas</h2>
+                        <button class="btn btn-primary btn-sm" id="btnNovaTurma">＋ Nova turma</button>
+                    </div>
+                    <div class="filtros">
+                        <input type="search" id="fTurmaBusca" placeholder="🔎 Buscar por nome, curso, professor...">
+                        <select id="fTurmaPeriodo"><option value="">Período</option><option>Manhã</option><option>Tarde</option><option>Noite</option></select>
+                        <select id="fTurmaIdade"><option value="">Idade</option></select>
+                        <select id="fTurmaCurso"><option value="">Curso</option></select>
+                        <select id="fTurmaSemana"><option value="">Semana</option></select>
+                        <select id="fTurmaProfessor"><option value="">Professor</option></select>
+                    </div>
+                    <div class="contagem" id="cntTurmasFiltro"></div>
+                    <div id="listaTurmas"><div class="carregando">Carregando turmas...</div></div>
+                </div>
+            </section>
+
+            <!-- PLANTÕES -->
+            <section id="view-plantoes" style="display:none">
+                <div class="card">
+                    <div class="lista-head">
+                        <h2>Plantões</h2>
+                        <button class="btn btn-primary btn-sm" id="btnNovoPlantao">＋ Novo plantão</button>
+                    </div>
+                    <div class="filtros">
+                        <input type="search" id="fPlantaoBusca" placeholder="🔎 Buscar por professor, observação...">
+                        <select id="fPlantaoProfessor"><option value="">Professor</option></select>
+                    </div>
+                    <div class="contagem" id="cntPlantoesFiltro"></div>
+                    <div id="listaPlantoes"><div class="carregando">Carregando plantões...</div></div>
+                </div>
+            </section>
+
+            <!-- AULAS EXPERIMENTAIS -->
+            <section id="view-aulasexp" style="display:none">
+                <div class="card">
+                    <div class="lista-head">
+                        <h2>Aulas Experimentais</h2>
+                        <button class="btn btn-primary btn-sm" id="btnNovaAulaExp">＋ Nova aula experimental</button>
+                    </div>
+                    <div class="filtros">
+                        <input type="search" id="fAulaExpBusca" placeholder="🔎 Buscar por professor, observação...">
+                        <select id="fAulaExpProfessor"><option value="">Professor</option></select>
+                    </div>
+                    <div class="contagem" id="cntAulaExpFiltro"></div>
+                    <div id="listaAulasExp"><div class="carregando">Carregando aulas experimentais...</div></div>
+                </div>
+            </section>
+
+            <!-- CONFIGURAÇÕES -->
+            <section id="view-config" style="display:none">
+                <div class="card">
+                    <div class="lista-head"><h2>Configurações da colônia</h2></div>
+                    <div class="config-info" id="configInfo"></div>
+                    <form id="formConfig">
+                        <div class="form-grid dois">
+                            <div class="form-group"><label for="cMes">Mês da colônia</label><input type="text" id="cMes" placeholder="Janeiro"></div>
+                            <div class="form-group"><label for="cAno">Ano da colônia</label><input type="text" id="cAno" placeholder="2027" inputmode="numeric"></div>
+                            <div class="form-group"><label for="cInicio">Data de início da colônia</label><input type="text" id="cInicio" placeholder="dd/mm/aaaa" inputmode="numeric"></div>
+                            <div class="form-group"><label for="cFim">Data de fim da colônia</label><input type="text" id="cFim" placeholder="dd/mm/aaaa" inputmode="numeric"></div>
+                            <div class="form-group"><label for="cAbertura">Data de abertura das inscrições</label><input type="text" id="cAbertura" placeholder="dd/mm/aaaa (vazio = sem limite)" inputmode="numeric"></div>
+                            <div class="form-group"><label for="cFechamento">Data de fechamento das inscrições</label><input type="text" id="cFechamento" placeholder="dd/mm/aaaa (vazio = sem limite)" inputmode="numeric"></div>
+                            <div class="form-group">
+                                <label for="cForcar">Inscrições</label>
+                                <select id="cForcar">
+                                    <option>Abertas</option>
+                                    <option>Fechadas</option>
+                                    <option>Automático (pelas datas)</option>
+                                </select>
+                                <div class="field-hint">"Automático" abre no dia de abertura e fecha às <b>23:59</b> do dia de fechamento (fuso de Brasília).</div>
+                            </div>
+                            <div class="form-group"><label for="cTelefone">Telefone de contato</label><input type="text" id="cTelefone" placeholder="(11) 4003-3599"></div>
+                            <div class="form-group full">
+                                <label for="cUnidades">Unidades cadastradas</label>
+                                <textarea id="cUnidades" placeholder="código=Nome, código=Nome"></textarea>
+                                <div class="field-hint">Formato: <b>código=Nome</b>, separados por vírgula. O código vai na URL de inscrição (<b>/inscricao/?unidade=código</b>) e o nome é salvo na planilha. Ex.: <b>digital-school=Digital School, conecta=Conecta, rede=Rede</b></div>
+                            </div>
+                        </div>
+                        <div style="margin-top:1.1rem; display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap">
+                            <button type="submit" class="btn btn-primary" id="btnSalvarConfig">Salvar configurações</button>
+                        </div>
+                        <div class="msg-ok" id="configOk">Configurações salvas com sucesso!</div>
+                        <div class="msg-erro" id="configErro"></div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ============ MODAL: TURMA ============ -->
+    <dialog id="dlgTurma">
+        <form id="formTurma">
+            <div class="dlg-head">
+                <h3 id="dlgTurmaTitulo">Nova turma</h3>
+                <button type="button" class="dlg-close" onclick="dlgTurma.close()">✕</button>
+            </div>
+            <div class="dlg-body">
+                <div class="dlg-secao">Curso e horário</div>
+                <div class="form-grid dois">
+                    <div class="form-group">
+                        <label for="t_curso">Curso *</label>
+                        <input type="text" id="t_curso" list="dlCursos" placeholder="Ex.: Roblox Teens" required>
+                        <datalist id="dlCursos"></datalist>
+                        <div class="field-hint">O nome do curso vem da aba <b>Cursos</b>. As aulas/conteúdos dela orientam o cronograma.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="t_vagas">Total de vagas *</label>
+                        <input type="number" id="t_vagas" min="0" max="999" placeholder="Ex.: 12" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="t_horarioInicio">Horário de início *</label>
+                        <input type="time" id="t_horarioInicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="t_horarioTermino">Horário de término *</label>
+                        <input type="time" id="t_horarioTermino" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="t_idade">Idade *</label>
+                        <select id="t_idade" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <option>até 09 anos</option>
+                            <option>de 10 até 13 anos</option>
+                            <option>de 14 até 17 anos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="t_periodo">Período</label>
+                        <select id="t_periodo">
+                            <option value="">(automático pelo horário)</option>
+                            <option>Manhã</option>
+                            <option>Tarde</option>
+                            <option>Noite</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="dlg-secao">Datas do mês da colônia * <span id="t_datasInfo" style="font-weight:600; color:#6b6b85; text-transform:none; letter-spacing:0"></span></div>
+                <div class="grade-dias" id="t_gradeDias"></div>
+                <div class="field-hint" style="margin-top:0.4rem">Clique nos dias em que a turma encontra, <b>em qualquer ordem</b> — a 1ª data é a Aula 1, a 2ª é a Aula 2, e assim por diante.</div>
+
+                <div class="dlg-secao">Professores *</div>
+                <div class="radio-linha">
+                    <label><input type="radio" name="t_modoProf" value="todos" checked> Um professor para todas as aulas</label>
+                    <label><input type="radio" name="t_modoProf" value="porAula"> Professor por aula</label>
+                </div>
+                <div class="form-group" id="t_blocoTodos" style="margin-top:0.7rem">
+                    <select id="t_profTodos"></select>
+                </div>
+                <div id="t_blocoPorAula" style="display:none">
+                    <div class="prof-aula-lista" id="t_profPorAula"></div>
+                </div>
+
+                <div class="dlg-secao">Sala e link</div>
+                <div class="form-grid dois">
+                    <div class="form-group">
+                        <label for="t_sala">Sala Zoom</label>
+                        <input type="text" id="t_sala" placeholder="Sugerido a partir do professor">
+                    </div>
+                    <div class="form-group">
+                        <label for="t_link">Link da aula</label>
+                        <input type="text" id="t_link" placeholder="https://zoom.us/j/...">
+                    </div>
+                </div>
+
+                <div class="dlg-secao">Extras</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="t_sufixo">Sufixo do nome (opcional)</label>
+                        <input type="text" id="t_sufixo" placeholder="(automático: Semana N ou dias da semana)">
+                        <div class="field-hint">Deixe em branco para gerar automático. Use para casos especiais, ex.: <b>Tarde do Sáb</b>.</div>
+                    </div>
+                    <div class="form-group full">
+                        <label for="t_obs">Observações</label>
+                        <textarea id="t_obs" placeholder="Texto livre (coluna R da planilha)"></textarea>
+                    </div>
+                </div>
+
+                <div class="previa-nome" id="t_previa" style="margin-top:0.9rem"></div>
+                <div class="msg-erro" id="t_erro"></div>
+            </div>
+            <div class="dlg-rodape">
+                <button type="button" class="btn btn-outline" onclick="dlgTurma.close()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="t_btnSalvar">Salvar turma</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- ============ MODAL: PLANTÃO / AULA EXPERIMENTAL ============ -->
+    <dialog id="dlgAtiv">
+        <form id="formAtiv">
+            <div class="dlg-head">
+                <h3 id="a_titulo">Novo plantão</h3>
+                <button type="button" class="dlg-close" onclick="dlgAtiv.close()">✕</button>
+            </div>
+            <div class="dlg-body">
+                <div class="dlg-secao">Data e horário</div>
+                <div class="form-grid dois">
+                    <div class="form-group">
+                        <label for="a_dia">Dia do mês da colônia *</label>
+                        <select id="a_dia" required></select>
+                        <div class="field-hint" id="a_diaHint"></div>
+                    </div>
+                    <div></div>
+                    <div class="form-group">
+                        <label for="a_horarioInicio">Horário de início *</label>
+                        <input type="time" id="a_horarioInicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="a_horarioTermino">Horário de término *</label>
+                        <input type="time" id="a_horarioTermino" required>
+                    </div>
+                </div>
+
+                <div class="dlg-secao">Professor e sala</div>
+                <div class="form-grid dois">
+                    <div class="form-group full">
+                        <label for="a_professor">Professor *</label>
+                        <select id="a_professor"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="a_sala">Sala Zoom</label>
+                        <input type="text" id="a_sala" placeholder="vazio = sala do professor">
+                        <div class="field-hint">Cada professor tem a sala própria do cadastro — deixe em branco para usá-la.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="a_link">Link</label>
+                        <input type="text" id="a_link" placeholder="vazio = link do professor">
+                    </div>
+                    <div class="form-group full">
+                        <label for="a_obs">Observações</label>
+                        <textarea id="a_obs" placeholder="Texto livre"></textarea>
+                    </div>
+                </div>
+                <div class="msg-erro" id="a_erro"></div>
+            </div>
+            <div class="dlg-rodape">
+                <button type="button" class="btn btn-outline" onclick="dlgAtiv.close()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="a_btnSalvar">Salvar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <div id="toast"></div>
+
+    <script>
+    'use strict';
+
+    // ==============================================================
+    //  CONFIGURAÇÃO
+    // ==============================================================
+    // Mesma URL do Web App do formulário (o roteamento ?api=admin vai no corpo do POST)
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzpyuxpbDvKtXLNL_fBBWOpYCzMeFtUea7fdUf3zxiYUBlK9mg3Tris_bjEzUgxLCrGOw/exec';
+    const TOKEN_KEY = 'cf_admin_token';
+
+    const DIAS_CURTOS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+    const CHAVES_CONFIG = [
+        'Mês da colônia', 'Ano da colônia', 'Data de início da colônia', 'Data de fim da colônia',
+        'Data de abertura das inscrições', 'Data de fechamento das inscrições',
+        'Inscrições (forçar)', 'Telefone de contato', 'Unidades'
+    ];
+
+    // ==============================================================
+    //  ESTADO
+    // ==============================================================
+    const state = {
+        token: localStorage.getItem(TOKEN_KEY) || '',
+        config: {},
+        turmas: [],
+        plantoes: [],
+        aulasExp: [],
+        professores: [],
+        filtros: {
+            turma: { busca: '', periodo: '', idade: '', curso: '', semana: '', professor: '' },
+            plantao: { busca: '', professor: '' },
+            aulaExp: { busca: '', professor: '' }
+        },
+        turmaEditando: null,   // id da turma em edição (null = nova)
+        ativTipo: 'plantao',   // 'plantao' | 'aulaExperimental' no modal de atividade simples
+        ativEditando: null     // id do plantão/aula experimental em edição (null = novo)
+    };
+
+    // ==============================================================
+    //  API
+    // ==============================================================
+    function apiCall(action, extra) {
+        const corpo = Object.assign({ api: 'admin', action: action }, extra || {});
+        if (state.token) corpo.token = state.token;
+
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 45000);
+
+        return fetch(API_URL, {
+            method: 'POST',
+            // text/plain evita o preflight de CORS, que o Apps Script não responde
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(corpo),
+            signal: ctl.signal
+        })
+        .then(r => { clearTimeout(timer); return r.json(); })
+        .then(resp => {
+            if (!resp.success) {
+                if (/Sessão expirada/i.test(resp.error || '')) sairLocal(true);
+                throw new Error(resp.error || 'Erro desconhecido');
+            }
+            return resp;
+        })
+        .catch(err => {
+            clearTimeout(timer);
+            if (err.name === 'AbortError') throw new Error('A conexão demorou demais. Verifique a internet e tente de novo.');
+            throw err;
+        });
+    }
+
+    // ==============================================================
+    //  HELPERS
+    // ==============================================================
+    const $ = id => document.getElementById(id);
+    const pad2 = n => ('0' + n).slice(-2);
+
+    function esc(v) {
+        return String(v == null ? '' : v)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function normalizar(txt) {
+        return String(txt || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+    // 'dd/mm/aaaa' → Date | null
+    function parseDataBR(txt) {
+        const m = String(txt || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        return m ? new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10)) : null;
+    }
+    function formatarDia(d) { return pad2(d.getDate()) + '/' + pad2(d.getMonth() + 1); }
+    function zeroHora(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+    function capitalizar(s) {
+        s = s.charAt(0).toUpperCase() + s.slice(1);
+        return s === 'Sab' ? 'Sáb' : s; // espelha capitalizar_ do Admin.gs
+    }
+
+    // Contexto da colônia a partir da config (mesmo formato do Admin.gs)
+    function contextoColonia() {
+        const inicio = parseDataBR(state.config['Data de início da colônia']);
+        const fim = parseDataBR(state.config['Data de fim da colônia']);
+        return {
+            inicio, fim,
+            ano: inicio ? inicio.getFullYear() : null,
+            mes: inicio ? inicio.getMonth() + 1 : null,
+            mesRef: inicio ? (['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][inicio.getMonth()] + '/' + inicio.getFullYear()) : ''
+        };
+    }
+    function dataDoDia(ctx, dia) {
+        if (!ctx.ano || !dia) return null;
+        const d = new Date(ctx.ano, ctx.mes - 1, parseInt(dia, 10));
+        return d.getDate() === parseInt(dia, 10) ? d : null;
+    }
+    function diasNoMes(ctx) {
+        if (!ctx.ano) return 31;
+        return new Date(ctx.ano, ctx.mes, 0).getDate();
+    }
+    // Nº da semana da colônia (espelha numeroSemana_ do Admin.gs)
+    function numeroSemana(ctx, data) {
+        if (!ctx.inicio) return 1;
+        const diff = Math.floor((zeroHora(data) - zeroHora(ctx.inicio)) / 86400000);
+        return diff < 0 ? 1 : Math.floor(diff / 7) + 1;
+    }
+    // Sufixo automático do nome (espelha a regra 6.2 no Admin.gs)
+    function sufixoAutomatico(ctx, datas) {
+        const semanas = [...new Set(datas.map(d => numeroSemana(ctx, dataDoDia(ctx, d))))];
+        if (semanas.length === 1) return 'Semana ' + semanas[0];
+        const dias = [...new Set(datas.map(d => DIAS_CURTOS[dataDoDia(ctx, d).getDay()]))].sort(
+            (a, b) => DIAS_CURTOS.indexOf(a) - DIAS_CURTOS.indexOf(b));
+        if (dias.length === 1) return capitalizar(dias[0]);
+        if (dias.length === 2) return capitalizar(dias[0]) + ' e ' + capitalizar(dias[1]);
+        return dias.map(capitalizar).join('-');
+    }
+    function copiarTexto(txt) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(txt);
+        }
+        const ta = document.createElement('textarea');
+        ta.value = txt; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (e) { /* ignora */ }
+        document.body.removeChild(ta);
+        return Promise.resolve();
+    }
+
+    // ==============================================================
+    //  TOAST
+    // ==============================================================
+    function toast(msg, tipo) {
+        const el = document.createElement('div');
+        el.className = 'toast-item toast-' + (tipo || 'ok');
+        el.textContent = msg;
+        $('toast').appendChild(el);
+        setTimeout(() => el.remove(), tipo === 'erro' ? 7000 : 4200);
+    }
+
+    // ==============================================================
+    //  SESSÃO / LOGIN
+    // ==============================================================
+    function sairLocal(silencioso) {
+        state.token = '';
+        localStorage.removeItem(TOKEN_KEY);
+        $('app').style.display = 'none';
+        $('headerSair').style.display = 'none';
+        $('telaLogin').style.display = 'block';
+        if (!silencioso) toast('Você saiu do painel.', 'ok');
+    }
+    function entrarApp() {
+        $('telaLogin').style.display = 'none';
+        $('app').style.display = 'block';
+        $('headerSair').style.display = 'flex';
+        carregarTudo();
+    }
+
+    $('formLogin').addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        const btn = $('btnLogin');
+        btn.disabled = true; btn.textContent = 'Entrando...';
+        $('loginErro').classList.remove('on');
+        apiCall('admin_login', { usuario: $('loginUsuario').value.trim(), senha: $('loginSenha').value })
+            .then(resp => {
+                state.token = resp.token;
+                localStorage.setItem(TOKEN_KEY, resp.token);
+                $('loginSenha').value = '';
+                entrarApp();
+            })
+            .catch(err => {
+                $('loginErro').textContent = err.message;
+                $('loginErro').classList.add('on');
+            })
+            .finally(() => { btn.disabled = false; btn.textContent = 'Entrar'; });
+    });
+    $('btnSair').addEventListener('click', () => {
+        apiCall('admin_logout').catch(() => {});
+        sairLocal(false);
+    });
+
+    // ==============================================================
+    //  NAVEGAÇÃO
+    // ==============================================================
+    let viewAtual = 'dashboard';
+    $('tabs').addEventListener('click', function(ev) {
+        const btn = ev.target.closest('.tab');
+        if (!btn) return;
+        viewAtual = btn.dataset.view;
+        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === btn));
+        ['dashboard', 'turmas', 'plantoes', 'aulasexp', 'config'].forEach(v => {
+            $('view-' + v).style.display = v === viewAtual ? 'block' : 'none';
+        });
+    });
+
+    // ==============================================================
+    //  CARREGAMENTO
+    // ==============================================================
+    function carregarTudo() {
+        $('dashConteudo').innerHTML = '<div class="carregando">Carregando dados...</div>';
+        Promise.all([
+            apiCall('admin_config_ler'),
+            apiCall('admin_listar', { tipo: 'turma' }),
+            apiCall('admin_listar', { tipo: 'plantao' }),
+            apiCall('admin_listar', { tipo: 'aulaExperimental' }),
+            apiCall('admin_listar', { tipo: 'professores' })
+        ])
+        .then(([cfg, turmas, plantoes, aulasExp, professores]) => {
+            state.config = cfg.config || {};
+            state.turmas = turmas.turmas || [];
+            state.plantoes = plantoes.atividades || [];
+            state.aulasExp = aulasExp.atividades || [];
+            state.professores = professores.professores || [];
+            renderTudo();
+        })
+        .catch(err => {
+            if (state.token === '' ) return; // sessão caiu; login já exibido
+            $('dashConteudo').innerHTML = '<div class="vazio">⚠️ ' + esc(err.message) + '<br><br><button class="btn btn-primary btn-sm" onclick="carregarTudo()">Tentar de novo</button></div>';
+            toast(err.message, 'erro');
+        });
+    }
+
+    function renderTudo() {
+        renderDashboard();
+        renderFiltrosTurma();
+        renderTurmas();
+        renderFiltrosAtiv('plantao');
+        renderListaAtiv('plantao');
+        renderFiltrosAtiv('aulaExp');
+        renderListaAtiv('aulaExp');
+        renderConfig();
+        $('cntTurmas').textContent = state.turmas.length;
+        $('cntPlantoes').textContent = state.plantoes.length;
+        $('cntAulasExp').textContent = state.aulasExp.length;
+    }
+
+    // ==============================================================
+    //  DASHBOARD
+    // ==============================================================
+    function renderDashboard() {
+        const ctx = contextoColonia();
+        const cfg = state.config;
+
+        // vagas
+        let vagasOferecidas = 0, vagasPreenchidas = 0;
+        state.turmas.forEach(t => { vagasOferecidas += t.totalVagas; vagasPreenchidas += t.inscricoes; });
+
+        // professores ativos
+        const profAtivos = state.professores.filter(p => p.ativo).length;
+
+        // situação das inscrições
+        const forcar = String(cfg['Inscrições (forçar)'] || 'Automático (pelas datas)').trim();
+        const abertura = parseDataBR(cfg['Data de abertura das inscrições']);
+        const fechamento = parseDataBR(cfg['Data de fechamento das inscrições']);
+        const hoje = zeroHora(new Date());
+        let sitBadge, sitTexto;
+        if (forcar === 'Fechadas') {
+            sitBadge = '<span class="badge fechadas">Fechadas</span>';
+            sitTexto = 'Fechadas manualmente no painel.';
+        } else if (forcar === 'Abertas') {
+            sitBadge = '<span class="badge abertas">Abertas</span>';
+            sitTexto = 'Abertas manualmente no painel' +
+                (fechamento ? ' · fechamento programado: ' + formatarDia(fechamento) : '') + '.';
+        } else {
+            if (abertura && hoje < abertura) {
+                sitBadge = '<span class="badge neutra">Não abriram</span>';
+                sitTexto = 'Abrem em ' + formatarDia(abertura) + '.';
+            } else if (fechamento && hoje > fechamento) {
+                sitBadge = '<span class="badge fechadas">Encerradas</span>';
+                sitTexto = 'Encerraram em ' + formatarDia(fechamento) + '.';
+            } else {
+                sitBadge = '<span class="badge abertas">Abertas</span>';
+                sitTexto = (fechamento ? 'Até ' + formatarDia(fechamento) + ' às 23:59.' : 'Sem data de fechamento.');
+            }
+        }
+
+        const mesAno = ctx.ano ? (cfg['Mês da colônia'] || '') + '/' + ctx.ano : '(configure em Configurações)';
+        const periodo = ctx.inicio && ctx.fim ? formatarDia(ctx.inicio) + ' a ' + formatarDia(ctx.fim) : '—';
+
+        // próximas atividades (próximos 7 dias; se vazio, próximas da colônia)
+        const eventos = coletarEventos();
+        const em7dias = eventos.filter(e => e.date >= hoje && e.date <= new Date(hoje.getTime() + 7 * 86400000));
+        const proximas = em7dias.length ? em7dias : eventos.filter(e => e.date >= hoje).slice(0, 8);
+        const tituloProx = em7dias.length ? 'Próximos 7 dias' : 'Próximas atividades';
+
+        const html = `
+        <div class="resumo-grid">
+            <div class="resumo-card red"><div class="num">${state.turmas.length}</div><div class="lbl">Turmas</div></div>
+            <div class="resumo-card"><div class="num">${state.plantoes.length}</div><div class="lbl">Plantões</div></div>
+            <div class="resumo-card"><div class="num">${state.aulasExp.length}</div><div class="lbl">Aulas experimentais</div></div>
+            <div class="resumo-card"><div class="num">${profAtivos}</div><div class="lbl">Professores ativos</div></div>
+            <div class="resumo-card">
+                <div class="vagas-tres">
+                    <div><div class="num">${vagasOferecidas}</div><div class="lbl">Vagas oferecidas</div></div>
+                    <div><div class="num">${vagasPreenchidas}</div><div class="lbl">Preenchidas</div></div>
+                    <div><div class="num">${Math.max(vagasOferecidas - vagasPreenchidas, 0)}</div><div class="lbl">Restantes</div></div>
+                </div>
+            </div>
+            <div class="resumo-card"><div>${sitBadge}</div><div class="lbl" style="margin-top:0.35rem">${esc(sitTexto)}</div></div>
+        </div>
+
+        <div class="card">
+            <div class="lista-head"><h2>Colônia ${esc(mesAno)}</h2><span class="badge neutra">${esc(periodo)}</span></div>
+            <h3 style="color:var(--navy); font-size:1rem; font-weight:800; margin-bottom:0.7rem">${tituloProx}</h3>
+            ${proximas.length
+                ? '<ul class="prox-lista">' + proximas.slice(0, 12).map(renderEventoProx).join('') + '</ul>'
+                : '<div class="vazio">Nenhuma atividade à vista. Cadastre turmas, plantões ou aulas experimentais.</div>'}
+        </div>`;
+        $('dashConteudo').innerHTML = html;
+    }
+
+    // Todos os eventos individuais (turma: 1 por data/aula; plantão/aula exp: 1 cada)
+    function coletarEventos() {
+        const ctx = contextoColonia();
+        const eventos = [];
+        state.turmas.forEach(t => {
+            (t.datas || []).forEach((dia, i) => {
+                const d = dataDoDia(ctx, dia);
+                if (d) eventos.push({ date: d, tipo: 'turma', titulo: esc(t.nome), sub: 'Aula ' + (i + 1) + ' · ' + esc(t.professorTexto || '—'), horario: t.horario, item: t, aula: i + 1 });
+            });
+        });
+        state.plantoes.forEach(p => {
+            const d = dataDoDia(ctx, p.data);
+            if (d) eventos.push({ date: d, tipo: 'plantao', titulo: 'Plantão — ' + esc(p.professor), sub: esc(p.salaZoom || p.observacoes || ''), horario: p.horarioInicio + ' - ' + p.horarioTermino, item: p });
+        });
+        state.aulasExp.forEach(a => {
+            const d = dataDoDia(ctx, a.data);
+            if (d) eventos.push({ date: d, tipo: 'aulaExperimental', titulo: 'Aula experimental — ' + esc(a.professor), sub: esc(a.salaZoom || a.observacoes || ''), horario: a.horarioInicio + ' - ' + a.horarioTermino, item: a });
+        });
+        eventos.sort((x, y) => x.date - y.date || (x.horario || '').localeCompare(y.horario || ''));
+        return eventos;
+    }
+    function renderEventoProx(e) {
+        const nomes = { turma: 'Turma', plantao: 'Plantão', aulaExperimental: 'Aula exp.' };
+        return `<li class="t-${e.tipo}">
+            <div class="prox-data"><div class="dia">${formatarDia(e.date)}</div><div class="sem">${DIAS_CURTOS[e.date.getDay()]}</div></div>
+            <div class="prox-info">
+                <div class="tit"><span class="tipo-tag t-${e.tipo}">${nomes[e.tipo]}</span>${e.titulo}</div>
+                <div class="sub">${esc(e.horario)} · ${e.sub}</div>
+            </div>
+        </li>`;
+    }
+
+    // ==============================================================
+    //  TURMAS — FILTROS + LISTA
+    // ==============================================================
+    function opcoesUnicas(valores, selecionado) {
+        const unicos = [...new Set(valores.map(v => String(v || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+        return unicos.map(v => `<option ${v === selecionado ? 'selected' : ''}>${esc(v)}</option>`).join('');
+    }
+    function renderFiltrosTurma() {
+        const f = state.filtros.turma;
+        $('fTurmaIdade').innerHTML = '<option value="">Idade</option>' + opcoesUnicas(state.turmas.map(t => t.idade), f.idade);
+        $('fTurmaCurso').innerHTML = '<option value="">Curso</option>' + opcoesUnicas(state.turmas.map(t => t.curso), f.curso);
+        $('fTurmaSemana').innerHTML = '<option value="">Semana</option>' + opcoesUnicas(state.turmas.map(t => t.semana), f.semana);
+        $('fTurmaProfessor').innerHTML = '<option value="">Professor</option>' +
+            state.professores.map(p => `<option ${p.nome === f.professor ? 'selected' : ''}>${esc(p.nome)}</option>`).join('');
+    }
+    function turmasFiltradas() {
+        const f = state.filtros.turma;
+        return state.turmas.filter(t => {
+            if (f.busca) {
+                const alvo = normalizar([t.nome, t.curso, t.professorTexto, t.salaZoom, t.observacoes].join(' '));
+                if (!alvo.includes(normalizar(f.busca))) return false;
+            }
+            if (f.periodo && t.periodo !== f.periodo) return false;
+            if (f.idade && t.idade !== f.idade) return false;
+            if (f.curso && t.curso !== f.curso) return false;
+            if (f.semana && t.semana !== f.semana) return false;
+            if (f.professor && normalizar(t.professorTexto || '').indexOf(normalizar(f.professor)) === -1) return false;
+            return true;
+        }).sort((a, b) => ((a.datas || [99])[0] - (b.datas || [99])[0]) || (a.horario || '').localeCompare(b.horario || ''));
+    }
+    function badgeVagas(t) {
+        const restantes = t.totalVagas - t.inscricoes;
+        if (restantes <= 0) return '<span class="badge cheia">Lotada</span>';
+        if (restantes <= 2) return `<span class="badge ultima">${restantes} restante${restantes > 1 ? 's' : ''}</span>`;
+        return `<span class="badge ok">${restantes} restantes</span>`;
+    }
+    function renderTurmas() {
+        const lista = turmasFiltradas();
+        const f = state.filtros.turma;
+        const temFiltro = f.busca || f.periodo || f.idade || f.curso || f.semana || f.professor;
+        $('cntTurmasFiltro').textContent = lista.length + ' turma(s)' + (temFiltro ? ' (filtro ativo)' : '');
+
+        if (!lista.length) {
+            $('listaTurmas').innerHTML = '<div class="vazio">' + (temFiltro ? 'Nenhuma turma encontrada com esses filtros.' : 'Nenhuma turma cadastrada. Clique em “＋ Nova turma”.') + '</div>';
+            return;
+        }
+
+        const thead = `<tr><th>Turma</th><th>Horário</th><th>Idade</th><th>Datas</th><th>Professor(es)</th><th>Vagas</th><th>Sala / Link</th><th>Ações</th></tr>`;
+        const linhas = lista.map(t => {
+            const ctx = contextoColonia();
+            const datasTxt = (t.datas || []).map(d => { const dt = dataDoDia(ctx, d); return dt ? formatarDia(dt) : d; }).join(', ');
+            const salaLink = [];
+            if (t.salaZoom) salaLink.push(`<button type="button" class="btn btn-outline btn-sm" onclick="copiarSala('turma',${t.id})">📋 Copiar sala</button>`);
+            if (t.link) salaLink.push(`<button type="button" class="btn btn-outline btn-sm" onclick="copiarLink('turma',${t.id})">🔗 Copiar link</button>`);
+            return `<tr>
+                <td><div class="t-nome">${esc(t.nome)}</div><div class="t-sub">${esc(t.curso || '')}${t.semana ? ' · ' + esc(t.semana) : ''}</div></td>
+                <td class="mono">${esc(t.horario)}<div class="t-sub">${esc(t.periodo)}</div></td>
+                <td>${esc(t.idade)}</td>
+                <td class="mono">${esc(datasTxt)}<div class="t-sub">${esc(t.diaSemana || '')}</div></td>
+                <td>${esc(t.professorTexto || '—')}</td>
+                <td class="mono">${t.inscricoes}/${t.totalVagas}<div style="margin-top:0.2rem">${badgeVagas(t)}</div></td>
+                <td><div class="t-sub">${esc(t.salaZoom || '—')}</div><div class="t-sub" style="word-break:break-all">${esc(t.link || '')}</div></td>
+                <td class="acoes">
+                    <button type="button" class="btn-icon" title="Editar" onclick="abrirTurma(${t.id})">✏️</button>
+                    <button type="button" class="btn-icon perigo" title="Excluir" onclick="excluirItem('turma',${t.id})">🗑️</button>
+                </td>
+            </tr>`;
+        }).join('');
+
+        const cards = lista.map(t => {
+            const ctx = contextoColonia();
+            const datasTxt = (t.datas || []).map(d => { const dt = dataDoDia(ctx, d); return dt ? formatarDia(dt) : d; }).join(', ');
+            return `<div class="linha-card">
+                <div class="top"><div class="t-nome">${esc(t.nome)}</div>${badgeVagas(t)}</div>
+                <div class="metas">
+                    <div class="meta"><b>Horário:</b> ${esc(t.horario)} (${esc(t.periodo)})</div>
+                    <div class="meta"><b>Idade:</b> ${esc(t.idade)} · <b>Vagas:</b> ${t.inscricoes}/${t.totalVagas}</div>
+                    <div class="meta"><b>Datas:</b> ${esc(datasTxt)} (${esc(t.diaSemana || '')})</div>
+                    <div class="meta"><b>Professores:</b> ${esc(t.professorTexto || '—')}</div>
+                    <div class="meta"><b>Sala:</b> ${esc(t.salaZoom || '—')}</div>
+                </div>
+                <div class="acoes-linha">
+                    ${t.link ? `<button type="button" class="btn btn-outline btn-sm" onclick="copiarLink('turma',${t.id})">🔗 Link</button>` : ''}
+                    ${t.salaZoom ? `<button type="button" class="btn btn-outline btn-sm" onclick="copiarSala('turma',${t.id})">📋 Sala</button>` : ''}
+                    <button type="button" class="btn btn-outline btn-sm" onclick="abrirTurma(${t.id})">✏️ Editar</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="excluirItem('turma',${t.id})">🗑️ Excluir</button>
+                </div>
+            </div>`;
+        }).join('');
+
+        $('listaTurmas').innerHTML =
+            `<div class="tabela-wrap"><table><thead>${thead}</thead><tbody>${linhas}</tbody></table></div>` +
+            `<div class="cards-list">${cards}</div>`;
+    }
+
+    // filtros (eventos)
+    [['fTurmaBusca', 'busca'], ['fTurmaPeriodo', 'periodo'], ['fTurmaIdade', 'idade'], ['fTurmaCurso', 'curso'], ['fTurmaSemana', 'semana'], ['fTurmaProfessor', 'professor']]
+        .forEach(([id, chave]) => {
+            $(id).addEventListener('input', function() { state.filtros.turma[chave] = this.value; renderTurmas(); });
+        });
+
+    function acharTurma(id) { return state.turmas.find(t => t.id === id); }
+    function acharAtiv(tipo, id) { return (tipo === 'plantao' ? state.plantoes : state.aulasExp).find(a => a.id === id); }
+
+    window.copiarSala = function(tipo, id) {
+        const item = tipo === 'turma' ? acharTurma(id) : acharAtiv(tipo, id);
+        copiarTexto(item.salaZoom || '').then(() => toast('Sala copiada: ' + (item.salaZoom || ''), 'ok'));
+    };
+    window.copiarLink = function(tipo, id) {
+        const item = tipo === 'turma' ? acharTurma(id) : acharAtiv(tipo, id);
+        copiarTexto(item.link || '').then(() => toast('Link copiado!', 'ok'));
+    };
+
+    // ==============================================================
+    //  TURMAS — CRUD (modal)
+    // ==============================================================
+    // estado interno do modal de turma
+    const modalT = { datas: new Set(), profPorAula: {} };
+
+    window.abrirTurma = function(id) {
+        const t = id ? acharTurma(id) : null;
+        state.turmaEditando = t ? t.id : null;
+        $('dlgTurmaTitulo').textContent = t ? 'Editar turma' : 'Nova turma';
+        $('t_erro').classList.remove('on');
+
+        const ctx = contextoColonia();
+
+        // curso: datalist com os cursos já usados
+        $('dlCursos').innerHTML = opcoesUnicas(state.turmas.map(x => x.curso), '');
+        $('t_curso').value = t ? (t.curso || '') : '';
+        $('t_vagas').value = t ? t.totalVagas : '';
+        $('t_horarioInicio').value = t ? (t.horarioInicio || '') : '';
+        $('t_horarioTermino').value = t ? (t.horarioTermino || '') : '';
+        const selIdade = $('t_idade');
+        if (t && t.idade && !([...selIdade.options].some(o => o.value === t.idade))) {
+            selIdade.add(new Option(t.idade, t.idade));
+        }
+        selIdade.value = t ? (t.idade || '') : '';
+        $('t_periodo').value = t ? ([...$('t_periodo').options].some(o => o.value === t.periodo) ? t.periodo : '') : '';
+        $('t_sufixo').value = '';
+        $('t_obs').value = t ? (t.observacoes || '') : '';
+        $('t_sala').value = t ? (t.salaZoom || '') : '';
+        $('t_link').value = t ? (t.link || '') : '';
+
+        // professores nos selects
+        const opcoesProf = '<option value="">Selecione o professor</option>' +
+            state.professores.map(p => `<option value="${esc(p.nome)}">${esc(p.nome)}${p.ativo ? '' : ' (inativo)'}</option>`).join('');
+        $('t_profTodos').innerHTML = opcoesProf;
+        $('t_profPorAula').innerHTML = ''; // regenerado conforme as datas
+
+        // datas selecionadas
+        modalT.datas = new Set(t ? (t.datas || []) : []);
+        modalT.profPorAula = {};
+        montarGradeDias();
+        montarProfPorAula(t ? professoresMapDeTexto(t.professoresPorAula) : null);
+
+        // modo professor
+        const modo = t ? modoProfDeTurma(t) : 'todos';
+        document.querySelector(`input[name="t_modoProf"][value="${modo}"]`).checked = true;
+        if (modo === 'todos') $('t_profTodos').value = professorUnicoDeTurma(t) || '';
+        alternarModoProf();
+
+        atualizarPreviaTurma();
+        $('dlgTurma').showModal();
+    };
+    $('btnNovaTurma').addEventListener('click', () => abrirTurma(null));
+
+    function modoProfDeTurma(t) {
+        const mapa = professoresMapDeTexto(t.professoresPorAula);
+        const nomes = [...new Set(Object.values(mapa))];
+        return nomes.length > 1 ? 'porAula' : 'todos';
+    }
+    function professorUnicoDeTurma(t) {
+        const mapa = professoresMapDeTexto(t.professoresPorAula);
+        const nomes = [...new Set(Object.values(mapa))];
+        return nomes.length === 1 ? nomes[0] : '';
+    }
+    // '1: A; 2-4: B' → {1:'A',2:'B',3:'B',4:'B'} (espelha professoresPorAulaMap_ do Admin.gs)
+    function professoresMapDeTexto(texto) {
+        const mapa = {};
+        String(texto || '').split(';').forEach(function(parte) {
+            const m = parte.match(/^\s*(\d+)\s*(?:-\s*(\d+))?\s*:\s*(.+)$/);
+            if (!m) return;
+            const a = parseInt(m[1], 10), b = m[2] ? parseInt(m[2], 10) : a;
+            for (let i = a; i <= b; i++) mapa[i] = m[3].trim();
+        });
+        return mapa;
+    }
+
+    function montarGradeDias() {
+        const ctx = contextoColonia();
+        const grade = $('t_gradeDias');
+        if (!ctx.ano) {
+            $('t_datasInfo').textContent = '— configure a data de início da colônia em Configurações';
+            grade.innerHTML = '<div class="vazio" style="grid-column:1/-1">Defina a data de início da colônia em Configurações para escolher as datas.</div>';
+            return;
+        }
+        $('t_datasInfo').textContent = '· ' + (state.config['Mês da colônia'] || '') + '/' + ctx.ano;
+        const total = diasNoMes(ctx);
+        let html = '';
+        for (let d = 1; d <= total; d++) {
+            const dt = new Date(ctx.ano, ctx.mes - 1, d);
+            html += `<button type="button" class="dia-btn ${modalT.datas.has(d) ? 'sel' : ''}" data-dia="${d}">
+                        <span class="n">${d}</span><span class="s">${DIAS_CURTOS[dt.getDay()]}</span>
+                     </button>`;
+        }
+        grade.innerHTML = html;
+    }
+    $('t_gradeDias').addEventListener('click', function(ev) {
+        const btn = ev.target.closest('.dia-btn');
+        if (!btn) return;
+        const d = parseInt(btn.dataset.dia, 10);
+        if (modalT.datas.has(d)) modalT.datas.delete(d);
+        else modalT.datas.add(d);
+        btn.classList.toggle('sel', modalT.datas.has(d));
+        montarProfPorAula();
+        atualizarPreviaTurma();
+    });
+
+    // um select de professor por aula selecionada
+    function montarProfPorAula(mapaExistente) {
+        const cont = $('t_profPorAula');
+        const ctx = contextoColonia();
+        const datas = [...modalT.datas].sort((a, b) => a - b);
+        const opcoesBase = state.professores.map(p => ({ valor: p.nome, texto: p.nome + (p.ativo ? '' : ' (inativo)') }));
+        const novo = {};
+        cont.innerHTML = datas.map((dia, idx) => {
+            const aula = idx + 1;
+            const atual = modalT.profPorAula[aula] || (mapaExistente ? mapaExistente[aula] : '') || '';
+            novo[aula] = atual;
+            const dt = dataDoDia(ctx, dia);
+            const opts = '<option value="">Selecione</option>' + opcoesBase.map(o =>
+                `<option value="${esc(o.valor)}" ${o.valor === atual ? 'selected' : ''}>${esc(o.texto)}</option>`).join('');
+            return `<div class="prof-aula-item">
+                <span class="rot">Aula ${aula} · ${dt ? formatarDia(dt) + ' (' + DIAS_CURTOS[dt.getDay()] + ')' : 'dia ' + dia}</span>
+                <select data-aula="${aula}">${opts}</select>
+            </div>`;
+        }).join('');
+        modalT.profPorAula = novo;
+    }
+    // seleciona corretamente nos selects por aula (delega mudanças)
+    $('t_profPorAula').addEventListener('change', function(ev) {
+        const sel = ev.target.closest('select[data-aula]');
+        if (sel) modalT.profPorAula[parseInt(sel.dataset.aula, 10)] = sel.value;
+    });
+    $('t_profTodos').addEventListener('change', function() {
+        // sugere sala/link do professor escolhido (só preenche campos vazios)
+        sugerirSalaLink(this.value);
+    });
+    function sugerirSalaLink(nomeProfessor) {
+        const prof = state.professores.find(p => p.nome === nomeProfessor);
+        if (!prof) return;
+        if (!$('t_sala').value.trim()) $('t_sala').value = prof.salaZoom || '';
+        if (!$('t_link').value.trim()) $('t_link').value = prof.link || '';
+    }
+    function alternarModoProf() {
+        const porAula = document.querySelector('input[name="t_modoProf"]:checked').value === 'porAula';
+        $('t_blocoTodos').style.display = porAula ? 'none' : 'block';
+        $('t_blocoPorAula').style.display = porAula ? 'block' : 'none';
+    }
+    document.querySelectorAll('input[name="t_modoProf"]').forEach(r => r.addEventListener('change', alternarModoProf));
+
+    // prévia do nome gerado (regra 6.2)
+    function atualizarPreviaTurma() {
+        const ctx = contextoColonia();
+        const curso = $('t_curso').value.trim();
+        const hi = $('t_horarioInicio').value, ht = $('t_horarioTermino').value;
+        const datas = [...modalT.datas].sort((a, b) => a - b);
+        let sufixo;
+        if ($('t_sufixo').value.trim()) sufixo = $('t_sufixo').value.trim();
+        else if (datas.length && ctx.inicio) sufixo = sufixoAutomatico(ctx, datas);
+        const el = $('t_previa');
+        if (!curso || !datas.length || !hi || !ht) {
+            el.innerHTML = '<span class="sem-nome">Preencha curso, datas e horários para ver o nome que será gerado.</span>';
+            return;
+        }
+        el.innerHTML = 'Nome gerado: <b>' + esc(curso + ' (' + sufixo + ') - ' + hi + ' - ' + ht) + '</b>' +
+            ($('t_sufixo').value.trim() ? ' <span class="sem-nome">(sufixo manual)</span>' : '');
+    }
+    ['t_curso', 't_horarioInicio', 't_horarioTermino', 't_sufixo'].forEach(id => {
+        $(id).addEventListener('input', atualizarPreviaTurma);
+        $(id).addEventListener('change', atualizarPreviaTurma);
+    });
+    // período sugerido em tempo real
+    $('t_horarioInicio').addEventListener('change', function() {
+        if (!$('t_periodo').value && this.value) {
+            const h = parseInt(this.value.split(':')[0], 10);
+            $('t_periodo').placeholder = h < 12 ? 'Manhã (automático)' : h < 18 ? 'Tarde (automático)' : 'Noite (automático)';
+        }
+    });
+
+    $('formTurma').addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        const btn = $('t_btnSalvar');
+        const erro = $('t_erro');
+        erro.classList.remove('on');
+
+        const porAula = document.querySelector('input[name="t_modoProf"]:checked').value === 'porAula';
+        const professores = porAula
+            ? { porAula: Object.assign({}, modalT.profPorAula) }
+            : { todos: $('t_profTodos').value };
+
+        const payload = {
+            id: state.turmaEditando || undefined,
+            curso: $('t_curso').value.trim(),
+            horarioInicio: $('t_horarioInicio').value,
+            horarioTermino: $('t_horarioTermino').value,
+            idade: $('t_idade').value,
+            totalVagas: $('t_vagas').value,
+            datas: [...modalT.datas].sort((a, b) => a - b),
+            periodo: $('t_periodo').value || undefined,
+            sufixo: $('t_sufixo').value.trim() || undefined,
+            professores: professores,
+            salaZoom: $('t_sala').value.trim(),
+            link: $('t_link').value.trim(),
+            observacoes: $('t_obs').value.trim()
+        };
+
+        btn.disabled = true; btn.textContent = 'Salvando...';
+        apiCall('admin_salvar_turma', payload)
+            .then(resp => {
+                $('dlgTurma').close();
+                toast('Turma salva: ' + (resp.nome || payload.curso), 'ok');
+                if (resp.avisos && resp.avisos.length) toast(resp.avisos.join('\n'), 'aviso');
+                carregarTudo();
+            })
+            .catch(err => { erro.textContent = err.message; erro.classList.add('on'); })
+            .finally(() => { btn.disabled = false; btn.textContent = 'Salvar turma'; });
+    });
+
+    // ==============================================================
+    //  PLANTÕES / AULAS EXPERIMENTAIS — FILTROS + LISTA + CRUD
+    // ==============================================================
+    function renderFiltrosAtiv(tipo) {
+        const f = state.filtros[tipo];
+        const sel = $(tipo === 'plantao' ? 'fPlantaoProfessor' : 'fAulaExpProfessor');
+        sel.innerHTML = '<option value="">Professor</option>' +
+            state.professores.map(p => `<option ${p.nome === f.professor ? 'selected' : ''}>${esc(p.nome)}</option>`).join('');
+    }
+    function atividadesFiltradas(tipo) {
+        const f = state.filtros[tipo];
+        const lista = (tipo === 'plantao' ? state.plantoes : state.aulasExp).slice();
+        return lista.filter(a => {
+            if (f.busca && !normalizar([a.professor, a.observacoes, a.salaZoom].join(' ')).includes(normalizar(f.busca))) return false;
+            if (f.professor && a.professor !== f.professor) return false;
+            return true;
+        }).sort((a, b) => (parseInt(a.data, 10) || 0) - (parseInt(b.data, 10) || 0) || a.horarioInicio.localeCompare(b.horarioInicio));
+    }
+    function renderListaAtiv(tipo) {
+        const lista = atividadesFiltradas(tipo);
+        const f = state.filtros[tipo];
+        const rotulo = tipo === 'plantao' ? 'plantão(s)' : 'aula(s) experimental(is)';
+        $(tipo === 'plantao' ? 'cntPlantoesFiltro' : 'cntAulaExpFiltro').textContent = lista.length + ' ' + rotulo + (f.busca || f.professor ? ' (filtro ativo)' : '');
+        const cont = $(tipo === 'plantao' ? 'listaPlantoes' : 'listaAulasExp');
+
+        if (!lista.length) {
+            cont.innerHTML = '<div class="vazio">' + ((f.busca || f.professor) ? 'Nada encontrado com esses filtros.' : 'Nada cadastrado ainda.') + '</div>';
+            return;
+        }
+        const ctx = contextoColonia();
+
+        const thead = '<tr><th>Data</th><th>Dia</th><th>Horário</th><th>Professor</th><th>Sala / Link</th><th>Obs.</th><th>Ações</th></tr>';
+        const linhas = lista.map(a => {
+            const d = dataDoDia(ctx, a.data);
+            return `<tr>
+                <td class="mono">${d ? formatarDia(d) : esc(a.data)}</td>
+                <td>${esc(a.diaSemana || (d ? DIAS_CURTOS[d.getDay()] : ''))}</td>
+                <td class="mono">${esc(a.horarioInicio)} - ${esc(a.horarioTermino)}</td>
+                <td>${esc(a.professor)}</td>
+                <td><div class="t-sub">${esc(a.salaZoom || '—')}</div><div class="t-sub" style="word-break:break-all">${esc(a.link || '')}</div></td>
+                <td class="t-sub">${esc(a.observacoes || '')}</td>
+                <td class="acoes">
+                    <button type="button" class="btn-icon" title="Editar" onclick="abrirAtiv('${tipo}',${a.id})">✏️</button>
+                    <button type="button" class="btn-icon perigo" title="Excluir" onclick="excluirItem('${tipo}',${a.id})">🗑️</button>
+                </td>
+            </tr>`;
+        }).join('');
+
+        const cards = lista.map(a => {
+            const d = dataDoDia(ctx, a.data);
+            return `<div class="linha-card">
+                <div class="top"><div class="t-nome">${esc(a.professor)}</div><span class="badge neutra">${d ? formatarDia(d) + ' · ' + DIAS_CURTOS[d.getDay()] : esc(a.data)}</span></div>
+                <div class="metas">
+                    <div class="meta"><b>Horário:</b> ${esc(a.horarioInicio)} - ${esc(a.horarioTermino)}</div>
+                    <div class="meta"><b>Sala:</b> ${esc(a.salaZoom || '(sala do professor)')}</div>
+                    ${a.observacoes ? `<div class="meta"><b>Obs.:</b> ${esc(a.observacoes)}</div>` : ''}
+                </div>
+                <div class="acoes-linha">
+                    ${a.link ? `<button type="button" class="btn btn-outline btn-sm" onclick="copiarLink('${tipo}',${a.id})">🔗 Link</button>` : ''}
+                    <button type="button" class="btn btn-outline btn-sm" onclick="abrirAtiv('${tipo}',${a.id})">✏️ Editar</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="excluirItem('${tipo}',${a.id})">🗑️ Excluir</button>
+                </div>
+            </div>`;
+        }).join('');
+
+        cont.innerHTML = `<div class="tabela-wrap"><table><thead>${thead}</thead><tbody>${linhas}</tbody></table></div>` +
+                         `<div class="cards-list">${cards}</div>`;
+    }
+    [['plantao', 'fPlantaoBusca', 'busca'], ['plantao', 'fPlantaoProfessor', 'professor'],
+     ['aulaExp', 'fAulaExpBusca', 'busca'], ['aulaExp', 'fAulaExpProfessor', 'professor']]
+        .forEach(([tipo, id, chave]) => {
+            $(id).addEventListener('input', function() {
+                state.filtros[tipo][chave] = this.value;
+                renderListaAtiv(tipo);
+            });
+        });
+
+    $('btnNovoPlantao').addEventListener('click', () => abrirAtiv('plantao', null));
+    $('btnNovaAulaExp').addEventListener('click', () => abrirAtiv('aulaExperimental', null));
+
+    window.abrirAtiv = function(tipo, id) {
+        state.ativTipo = tipo;
+        state.ativEditando = id || null;
+        const item = id ? acharAtiv(tipo, id) : null;
+        $('a_titulo').textContent = (item ? 'Editar ' : 'Novo ') + (tipo === 'plantao' ? 'plantão' : 'aula experimental');
+        $('a_erro').classList.remove('on');
+
+        const ctx = contextoColonia();
+        const selDia = $('a_dia');
+        if (!ctx.ano) {
+            selDia.innerHTML = '<option value="">(configure a data de início da colônia)</option>';
+            $('a_diaHint').textContent = 'Defina a data de início da colônia em Configurações.';
+        } else {
+            const total = diasNoMes(ctx);
+            let html = '<option value="">Selecione o dia</option>';
+            for (let d = 1; d <= total; d++) {
+                const dt = new Date(ctx.ano, ctx.mes - 1, d);
+                html += `<option value="${d}">${pad2(d)} · ${DIAS_CURTOS[dt.getDay()]}</option>`;
+            }
+            selDia.innerHTML = html;
+            $('a_diaHint').textContent = 'Mês da colônia: ' + (state.config['Mês da colônia'] || '') + '/' + ctx.ano;
+        }
+        selDia.value = item ? String(item.data) : '';
+
+        $('a_horarioInicio').value = item ? (item.horarioInicio || '') : '';
+        $('a_horarioTermino').value = item ? (item.horarioTermino || '') : '';
+        $('a_professor').innerHTML = '<option value="">Selecione o professor</option>' +
+            state.professores.map(p => `<option value="${esc(p.nome)}">${esc(p.nome)}${p.ativo ? '' : ' (inativo)'}</option>`).join('');
+        $('a_professor').value = item ? (item.professor || '') : '';
+        $('a_sala').value = item ? (item.salaZoom || '') : '';
+        $('a_link').value = item ? (item.link || '') : '';
+        $('a_obs').value = item ? (item.observacoes || '') : '';
+
+        $('dlgAtiv').showModal();
+    };
+
+    $('a_professor').addEventListener('change', function() {
+        // sala/link: em branco o backend usa a sala do próprio professor
+        if (!$('a_sala').value.trim() || !$('a_link').value.trim()) {
+            const prof = state.professores.find(p => p.nome === this.value);
+            if (prof) {
+                if (!$('a_sala').value.trim()) $('a_sala').placeholder = prof.salaZoom ? 'sugestão: ' + prof.salaZoom : 'vazio = sala do professor';
+                if (!$('a_link').value.trim()) $('a_link').placeholder = prof.link ? 'sugestão: ' + prof.link : 'vazio = link do professor';
+            }
+        }
+    });
+
+    $('formAtiv').addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        const btn = $('a_btnSalvar');
+        const erro = $('a_erro');
+        erro.classList.remove('on');
+
+        const payload = {
+            id: state.ativEditando || undefined,
+            data: $('a_dia').value,
+            horarioInicio: $('a_horarioInicio').value,
+            horarioTermino: $('a_horarioTermino').value,
+            professor: $('a_professor').value,
+            salaZoom: $('a_sala').value.trim(),
+            link: $('a_link').value.trim(),
+            observacoes: $('a_obs').value.trim()
+        };
+
+        const acao = state.ativTipo === 'plantao' ? 'admin_salvar_plantao' : 'admin_salvar_aula_experimental';
+        btn.disabled = true; btn.textContent = 'Salvando...';
+        apiCall(acao, payload)
+            .then(() => {
+                $('dlgAtiv').close();
+                toast(state.ativTipo === 'plantao' ? 'Plantão salvo!' : 'Aula experimental salva!', 'ok');
+                carregarTudo();
+            })
+            .catch(err => { erro.textContent = err.message; erro.classList.add('on'); })
+            .finally(() => { btn.disabled = false; btn.textContent = 'Salvar'; });
+    });
+
+    // ==============================================================
+    //  EXCLUIR
+    // ==============================================================
+    window.excluirItem = function(tipo, id) {
+        const rotulos = { turma: 'turma', plantao: 'plantão', aulaExperimental: 'aula experimental' };
+        let nome = '';
+        if (tipo === 'turma') nome = (acharTurma(id) || {}).nome || '';
+        else nome = (acharAtiv(tipo, id) || {}).professor || '';
+        if (!confirm('Excluir ' + rotulos[tipo] + (nome ? ' "' + nome + '"' : '') + '?\n\nEssa ação não pode ser desfeita (a linha some da planilha).')) return;
+
+        apiCall('admin_excluir', { tipo: tipo, id: id })
+            .then(() => { toast('Excluído com sucesso.', 'ok'); carregarTudo(); })
+            .catch(err => toast(err.message, 'erro'));
+    };
+
+    // ==============================================================
+    //  CONFIGURAÇÕES
+    // ==============================================================
+    function renderConfig() {
+        const c = state.config;
+        $('cMes').value = c['Mês da colônia'] || '';
+        $('cAno').value = c['Ano da colônia'] || '';
+        $('cInicio').value = c['Data de início da colônia'] || '';
+        $('cFim').value = c['Data de fim da colônia'] || '';
+        $('cAbertura').value = c['Data de abertura das inscrições'] || '';
+        $('cFechamento').value = c['Data de fechamento das inscrições'] || '';
+        const forcar = c['Inscrições (forçar)'] || 'Automático (pelas datas)';
+        $('cForcar').value = [...$('cForcar').options].some(o => o.value === forcar) ? forcar : 'Automático (pelas datas)';
+        $('cTelefone').value = c['Telefone de contato'] || '';
+        $('cUnidades').value = c['Unidades'] || '';
+
+        const ctx = contextoColonia();
+        $('configInfo').innerHTML = ctx.ano
+            ? '📅 Colônia atual: <b>' + esc((c['Mês da colônia'] || '') + '/' + ctx.ano) + '</b> · ' + formatarDia(ctx.inicio) + ' a ' + formatarDia(ctx.fim) + ' · Mês de referência das atividades: <b>' + esc(ctx.mesRef) + '</b>'
+            : '⚠️ Defina a <b>data de início da colônia</b> — dela saem o mês de referência, as semanas e as datas válidas das turmas e plantões.';
+    }
+
+    $('formConfig').addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        const btn = $('btnSalvarConfig');
+        $('configErro').classList.remove('on');
+        $('configOk').classList.remove('on');
+
+        // validação das datas informadas
+        const datas = {
+            'Data de início da colônia': $('cInicio').value.trim(),
+            'Data de fim da colônia': $('cFim').value.trim(),
+            'Data de abertura das inscrições': $('cAbertura').value.trim(),
+            'Data de fechamento das inscrições': $('cFechamento').value.trim()
+        };
+        for (const [chave, valor] of Object.entries(datas)) {
+            if (valor && !parseDataBR(valor)) {
+                $('configErro').textContent = 'Data inválida em "' + chave + '": use o formato dd/mm/aaaa.';
+                $('configErro').classList.add('on');
+                return;
+            }
+        }
+
+        const config = {
+            'Mês da colônia': $('cMes').value.trim(),
+            'Ano da colônia': $('cAno').value.trim(),
+            'Data de início da colônia': datas['Data de início da colônia'],
+            'Data de fim da colônia': datas['Data de fim da colônia'],
+            'Data de abertura das inscrições': datas['Data de abertura das inscrições'],
+            'Data de fechamento das inscrições': datas['Data de fechamento das inscrições'],
+            'Inscrições (forçar)': $('cForcar').value,
+            'Telefone de contato': $('cTelefone').value.trim(),
+            'Unidades': $('cUnidades').value.trim()
+        };
+
+        btn.disabled = true; btn.textContent = 'Salvando...';
+        apiCall('admin_config_salvar', { config: config })
+            .then(resp => {
+                state.config = resp.config || config;
+                renderConfig();
+                renderDashboard();
+                $('configOk').classList.add('on');
+                toast('Configurações salvas!', 'ok');
+                setTimeout(() => $('configOk').classList.remove('on'), 5000);
+            })
+            .catch(err => {
+                $('configErro').textContent = err.message;
+                $('configErro').classList.add('on');
+            })
+            .finally(() => { btn.disabled = false; btn.textContent = 'Salvar configurações'; });
+    });
+
+    // ==============================================================
+    //  INICIALIZAÇÃO
+    // ==============================================================
+    if (state.token) {
+        // valida o token salvo buscando a config; se expirou, mostra o login
+        apiCall('admin_config_ler')
+            .then(resp => { state.config = resp.config || {}; entrarApp(); })
+            .catch(() => sairLocal(true));
+    } else {
+        sairLocal(true);
+    }
+    </script>
+</body>
+</html>
