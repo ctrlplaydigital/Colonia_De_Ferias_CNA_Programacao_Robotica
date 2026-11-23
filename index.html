@@ -177,6 +177,8 @@
         /* ===== AUTORIZAÇÃO, ANTI-ROBÔ, TENTAR NOVAMENTE ===== */
         .form-group label.consent { display: flex; gap: 0.7rem; align-items: flex-start; margin: 0; padding: 0.85rem 0.95rem; background: var(--bg); border-radius: 12px; border: 1.5px solid var(--line); font-size: 0.85rem; font-weight: 500; line-height: 1.5; color: var(--text); cursor: pointer; }
         .form-group input[type="checkbox"] { flex: none; width: 22px; height: 22px; padding: 0; margin-top: 2px; accent-color: var(--red); box-shadow: none; cursor: pointer; }
+        .form-group label.consent.destaque { background: #FFF8E6; border-color: #F0B429; color: #7A4A00; }
+        .form-group label.consent.destaque strong { color: #B45309; }
         .form-group.has-error label.consent { border-color: #DC2626; background: #FFF5F5; }
         .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
         .field-sugestao.retry { color: #B91C1C; font-weight: 600; }
@@ -189,7 +191,10 @@
     </header>
 
     <main class="page">
-    <div id="mainContainer">
+    <div id="loadingScreen" class="card status-card" style="margin-top:1rem;">
+        <div class="carregando">Carregando informações da colônia...</div>
+    </div>
+    <div id="mainContainer" style="display:none;">
 
         <section class="hero">
             <span class="hero-chip">☀️ Férias · <span data-cfg="mesAno"></span></span>
@@ -301,6 +306,14 @@
                 </div>
 
                 <div class="form-group full">
+                    <label class="consent destaque" for="possuiComputador">
+                        <input type="checkbox" id="possuiComputador" name="possuiComputador">
+                        <span><strong>⚠️ Aviso importante:</strong> para realizar as aulas é necessário ter computador ou notebook. Declaro que o aluno possui computador ou notebook para participar das aulas.</span>
+                    </label>
+                    <div class="field-error" id="err-possuiComputador">Marque que o aluno possui computador ou notebook para continuar.</div>
+                </div>
+
+                <div class="form-group full">
                     <label class="consent" for="autorizacao">
                         <input type="checkbox" id="autorizacao" name="autorizacao">
                         <span>Declaro que sou o responsável pelo aluno (ou estou autorizado por ele) e autorizo esta inscrição. Estou de acordo com o uso dos dados informados apenas para a matrícula, o contato e o envio das informações do curso, conforme a Lei Geral de Proteção de Dados (LGPD).</span>
@@ -409,26 +422,15 @@
     <script>
         
         // ==============================================================
-        //  CONFIGURAÇÕES RÁPIDAS  (é só mudar aqui a cada edição da colônia)
+        //  CONFIGURAÇÕES (carregadas da planilha via ?action=config)
+        //  Valores abaixo são apenas fallback caso a API não responda.
         // ==============================================================
-        const INSCRICOES_ABERTAS = true;          // true = formulário aberto | false = "Inscrições Encerradas"
-        const MES_COLONIA = 'Janeiro';            // mês da colônia, por extenso (primeira letra maiúscula)
-        const ANO_COLONIA = 2027;                 // ano da colônia
-        const TELEFONE_CONTATO = '(11) 4003-3599';// telefone que aparece nas telas de contato
-
-        // Derivados (não precisa mexer)
-        const MES_ABREV = MES_COLONIA.slice(0, 3) + '-' + String(ANO_COLONIA).slice(-2);   // ex.: Jan-27
-        (function aplicarConfig() {
-            const valores = { mesAno: MES_COLONIA + ' ' + ANO_COLONIA, ano: ANO_COLONIA, telefone: TELEFONE_CONTATO };
-            document.querySelectorAll('[data-cfg]').forEach(function(el) { el.textContent = valores[el.dataset.cfg]; });
-        })();
-
-        // ==============================================================
-        // UNIDADES: cada unidade tem o seu link  ->  index.html?unidade=<código>
-        // Para criar outro formulário, basta adicionar uma linha aqui:
-        //   'código-no-link': 'Nome que será gravado na coluna Unidade da planilha'
-        // ==============================================================
-        const UNIDADES = {
+        let INSCRICOES_ABERTAS = true;
+        let MES_COLONIA = 'Janeiro';
+        let ANO_COLONIA = 2027;
+        let TELEFONE_CONTATO = '(11) 4003-3599';
+        let MES_ABREV = '';
+        let UNIDADES = {
             'digital-school': 'Digital School',
             'conecta': 'Conecta',
             'rede': 'Rede'
@@ -439,13 +441,66 @@
                 .toLowerCase().trim().replace(/[\s_]+/g, '-');
         }
 
+        function aplicarConfig() {
+            MES_ABREV = MES_COLONIA.slice(0, 3) + '-' + String(ANO_COLONIA).slice(-2);
+            const valores = { mesAno: MES_COLONIA + ' ' + ANO_COLONIA, ano: ANO_COLONIA, telefone: TELEFONE_CONTATO };
+            document.querySelectorAll('[data-cfg]').forEach(function(el) { el.textContent = valores[el.dataset.cfg]; });
+        }
+
+        function parseUnidades(txt) {
+            const out = {};
+            const raw = String(txt || '').trim();
+            if (raw.charAt(0) === '[') {
+                try {
+                    const arr = JSON.parse(raw);
+                    if (Array.isArray(arr)) {
+                        arr.forEach(function(u) {
+                            const code = String(u.codigo || u.code || '').trim();
+                            const nome = String(u.nome || u.name || '').trim();
+                            if (code && nome) out[normalizarSlug(code)] = nome;
+                        });
+                        if (Object.keys(out).length) return out;
+                    }
+                } catch (e) { /* fallback */ }
+            }
+            raw.split(',').forEach(function(part) {
+                const idx = part.indexOf('=');
+                if (idx < 0) return;
+                const code = part.slice(0, idx).trim();
+                const nome = part.slice(idx + 1).trim();
+                if (code && nome) out[normalizarSlug(code)] = nome;
+            });
+            return Object.keys(out).length ? out : null;
+        }
+
         // URL do Web App do Google Apps Script (termina em /exec)
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzpyuxpbDvKtXLNL_fBBWOpYCzMeFtUea7fdUf3zxiYUBlK9mg3Tris_bjEzUgxLCrGOw/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyaWQkfaVN3vMfbPheXzaFGkGxAX2LzXf-sMmCvz9O73JZggls75Zjqv2W_SP5o0MPfzA/exec';
+
+        function carregarConfig() {
+            return fetch(API_URL + '?action=config')
+                .then(function(r) { return r.json(); })
+                .then(function(resp) {
+                    if (!resp || !resp.success || !resp.config) return;
+                    const c = resp.config;
+                    if (c.mes) MES_COLONIA = String(c.mes);
+                    if (c.ano) ANO_COLONIA = c.ano;
+                    if (typeof c.inscricoesAbertas === 'boolean') INSCRICOES_ABERTAS = c.inscricoesAbertas;
+                    if (c.telefone) TELEFONE_CONTATO = String(c.telefone);
+                    const u = parseUnidades(c.unidades);
+                    if (u) UNIDADES = u;
+                })
+                .catch(function() { /* mantém fallback */ });
+        }
 
         let turmasDisponiveis = [];
         let turmaSelecionadaInfo = null;
         
         document.addEventListener('DOMContentLoaded', function() {
+    carregarConfig().then(function() {
+        aplicarConfig();
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) loadingScreen.style.display = 'none';
+
             if (!INSCRICOES_ABERTAS) {
                 document.getElementById('mainContainer').style.display = 'none';
                 document.getElementById('closedScreen').style.display = 'block';
@@ -464,6 +519,7 @@
                 return;
             }
             document.getElementById('unidade').value = unidadeNome;
+            document.getElementById('mainContainer').style.display = '';
 
             carregarIdades();
 
@@ -489,6 +545,7 @@
                     if (el.closest('.form-group').classList.contains('has-error')) validarCampo(id);
                 });
             });
+            document.getElementById('possuiComputador').addEventListener('change', function() { validarCampo('possuiComputador'); });
             document.getElementById('autorizacao').addEventListener('change', function() { validarCampo('autorizacao'); });
             document.getElementById('emailResponsavel').addEventListener('input', function() {
                 emailAvisado = false;
@@ -499,7 +556,8 @@
             document.getElementById('periodo').addEventListener('change', carregarTurmas);
             document.getElementById('turma').addEventListener('change', exibirInformacoesTurma);
             document.getElementById('inscriptionForm').addEventListener('submit', enviarFormulario);
-        });
+    });
+});
         
 
         // ==============================================================
@@ -613,9 +671,10 @@
             idade: validarSelecao('Selecione a idade.'),
             periodo: validarSelecao('Selecione o período.'),
             turma: validarSelecao('Selecione a turma.'),
+            possuiComputador: validarSelecao('Marque que o aluno possui computador ou notebook para continuar.'),
             autorizacao: validarSelecao('Marque a autorização para continuar.')
         };
-        const ORDEM_CAMPOS = ['nomeAluno', 'nomeResponsavel', 'telefoneContato', 'emailResponsavel', 'idade', 'periodo', 'turma', 'autorizacao'];
+        const ORDEM_CAMPOS = ['nomeAluno', 'nomeResponsavel', 'telefoneContato', 'emailResponsavel', 'idade', 'periodo', 'turma', 'possuiComputador', 'autorizacao'];
         let emailAvisado = false;
 
         function mostrarErro(id, msg) {
@@ -990,6 +1049,7 @@
                 unidade: document.getElementById('unidade').value,
                 mes: MES_COLONIA,
                 ano: String(ANO_COLONIA),
+                possuiComputador: document.getElementById('possuiComputador').checked,
                 autorizacao: document.getElementById('autorizacao').checked,
                 contatoAlt: document.getElementById('contatoAlt').value,
                 tempoPreenchimento: Date.now() - PAGINA_ABERTA_EM
